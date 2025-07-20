@@ -1,4 +1,4 @@
-package ua.nure.holovashenko.medvision_mobile.ui.theme
+package ua.nure.holovashenko.medvision_mobile.presentation.ui.theme
 import androidx.compose.ui.graphics.Color
 
 val primaryLight = Color(0xFF33618D)

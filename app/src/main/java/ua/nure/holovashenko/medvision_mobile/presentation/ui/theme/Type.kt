@@ -1,4 +1,4 @@
-package ua.nure.holovashenko.medvision_mobile.ui.theme
+package ua.nure.holovashenko.medvision_mobile.presentation.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.FontFamily
