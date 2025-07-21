@@ -8,6 +8,9 @@ import androidx.navigation.compose.rememberNavController
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.LoginScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.RegistrationScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.doctor_panel.DoctorPanelScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.patient_panel.PatientPanelScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.profile.ProfileScreen
 
 @Composable
 fun NavigationGraph(
@@ -47,15 +50,23 @@ fun NavigationGraph(
         }
 
         composable(Screen.PatientPanel.route) {
-            // TODO: PatientPanelScreen()
+            PatientPanelScreen(
+                onProfileClick = {
+                    navController.navigate(Screen.Profile.route)
+                }
+            )
         }
 
         composable(Screen.DoctorPanel.route) {
-            // TODO: DoctorPanelScreen()
+            DoctorPanelScreen(
+                onProfileClick = {
+                    navController.navigate(Screen.Profile.route)
+                }
+            )
         }
 
         composable(Screen.Profile.route) {
-            // TODO: ProfileScreen()
+            ProfileScreen()
         }
     }
 }
