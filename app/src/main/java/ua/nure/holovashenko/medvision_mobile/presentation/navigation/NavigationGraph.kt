@@ -66,7 +66,15 @@ fun NavigationGraph(
         }
 
         composable(Screen.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                onLogout = {
+                    navController.navigate(Screen.Auth.route) {
+                    popUpTo(0)
+                    }
+                           },
+                onBack = {
+                    navController.popBackStack()
+                })
         }
     }
 }
