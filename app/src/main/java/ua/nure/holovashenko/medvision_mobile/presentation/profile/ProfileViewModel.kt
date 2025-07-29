@@ -35,9 +35,6 @@ class ProfileViewModel @Inject constructor(
                     .onSuccess {
                         avatar.value = it
                     }
-                    .onFailure {
-                        errorMessage.value = it.message
-                    }
             }
 
             repository.getProfile()
@@ -81,10 +78,35 @@ class ProfileViewModel @Inject constructor(
 
     fun uploadAvatar(bytes: ByteArray, name: String) {
         viewModelScope.launch {
-            repository.uploadAvatar(bytes, name).onSuccess {
+            isLoading.value = true
+            repository.uploadAvatar(bytes, name).onSuccess { url ->
                 avatar.value = bytes
+            }.onFailure {
+                errorMessage.value = "Не вдалося завантажити аватар: ${it.message}"
             }
+            isLoading.value = false
         }
     }
-}
 
+    fun validateName(name: String) = if (name.isBlank()) "Ім’я обов’язкове" else null
+
+    fun validateBirthDate(date: String) =
+        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}")))
+            "Неправильний формат дати (YYYY-MM-DD)"
+        else null
+
+    fun validateGender(gender: String) = if (gender.isBlank()) "Оберіть стать" else null
+
+    fun validateHeight(height: String) =
+        if (height.toDoubleOrNull()?.let { it > 0 } != true)
+            "Невірне значення зросту"
+        else null
+
+    fun validateWeight(weight: String) =
+        if (weight.toDoubleOrNull()?.let { it > 0 } != true)
+            "Невірне значення ваги"
+        else null
+
+    fun validateNotEmpty(field: String, label: String): String? =
+        if (field.isBlank()) "$label обов’язкове" else null
+}

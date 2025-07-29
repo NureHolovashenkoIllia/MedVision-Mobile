@@ -38,5 +38,5 @@ interface AuthApi {
 
     @Multipart
     @POST("auth/avatar")
-    suspend fun uploadAvatar(@Part image: MultipartBody.Part): Response<String>
+    suspend fun uploadAvatar(@Part image: MultipartBody.Part): Response<ResponseBody>
 }

@@ -10,7 +10,6 @@ import ua.nure.holovashenko.medvision_mobile.data.remote.model.DoctorEditRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.LoginRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientEditRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientRegisterRequest
-import ua.nure.holovashenko.medvision_mobile.data.remote.model.UserProfileResponse
 import ua.nure.holovashenko.medvision_mobile.domain.model.AuthResult
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserProfile
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
@@ -140,7 +139,13 @@ class AuthRepositoryImpl @Inject constructor(
         runCatching {
             val req = imageBytes.toRequestBody("image/*".toMediaTypeOrNull())
             val part = MultipartBody.Part.createFormData("file", fileName, req)
-            remoteDataSource.uploadAvatar(part).body()!!
+            val response = remoteDataSource.uploadAvatar(part)
+
+            if (response.isSuccessful) {
+                response.body()?.string() ?: throw IllegalStateException("Порожня відповідь від сервера")
+            } else {
+                throw IllegalStateException("Помилка ${response.code()}: ${response.errorBody()?.string()}")
+            }
         }
 
     private fun parseRoleFromToken(token: String): UserRole? {

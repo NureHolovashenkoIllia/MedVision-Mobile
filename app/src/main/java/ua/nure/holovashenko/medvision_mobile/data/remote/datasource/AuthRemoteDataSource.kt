@@ -55,7 +55,7 @@ class AuthRemoteDataSource @Inject constructor(
         return authApi.getAvatar()
     }
 
-    suspend fun uploadAvatar(image: MultipartBody.Part): Response<String> {
+    suspend fun uploadAvatar(image: MultipartBody.Part): Response<ResponseBody> {
         return authApi.uploadAvatar(image)
     }
 }

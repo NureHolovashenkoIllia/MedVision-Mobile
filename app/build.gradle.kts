@@ -49,6 +49,8 @@ android {
 
 dependencies {
 
+    implementation("com.github.yalantis:ucrop:2.2.10")
+
     // Data Store
     implementation("androidx.datastore:datastore-preferences:1.1.7")
 
