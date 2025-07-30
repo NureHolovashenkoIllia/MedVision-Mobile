@@ -6,15 +6,14 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ua.nure.holovashenko.medvision_mobile.data.local.AuthPreferences
+import ua.nure.holovashenko.medvision_mobile.data.remote.api.AnalysisApi
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.AuthApi
-import javax.inject.Named
+import ua.nure.holovashenko.medvision_mobile.data.remote.api.DoctorApi
 import javax.inject.Singleton
 
 @Module
@@ -62,4 +61,12 @@ object NetworkModule {
     @Provides
     fun provideAuthApi(retrofit: Retrofit): AuthApi =
         retrofit.create(AuthApi::class.java)
+
+    @Provides
+    fun provideDoctorApi(retrofit: Retrofit): DoctorApi =
+        retrofit.create(DoctorApi::class.java)
+
+    @Provides
+    fun provideAnalysisApi(retrofit: Retrofit): AnalysisApi =
+        retrofit.create(AnalysisApi::class.java)
 }

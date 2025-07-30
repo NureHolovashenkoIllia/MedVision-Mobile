@@ -2,15 +2,20 @@ package ua.nure.holovashenko.medvision_mobile.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
+import ua.nure.holovashenko.medvision_mobile.presentation.analysis_detail.AnalysisDetailScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.LoginScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.RegistrationScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.doctor_panel.DoctorPanelScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.patient_detail.PatientDetailScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_panel.PatientPanelScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.profile.ProfileScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.upload_analysis.UploadAnalysisScreen
 
 @Composable
 fun NavigationGraph(
@@ -61,6 +66,53 @@ fun NavigationGraph(
             DoctorPanelScreen(
                 onProfileClick = {
                     navController.navigate(Screen.Profile.route)
+                },
+                onPatientClick = { patientId ->
+                    navController.navigate(Screen.PatientDetail.createRoute(patientId))
+                }
+
+            )
+        }
+
+        composable(
+            route = Screen.PatientDetail.route,
+            arguments = listOf(navArgument("patientId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val patientId = backStackEntry.arguments?.getLong("patientId") ?: return@composable
+            PatientDetailScreen(
+                patientId = patientId,
+                onBackClick = { navController.popBackStack() },
+                onAddAnalysisClick = { pid ->
+                    navController.navigate(Screen.UploadAnalysis.createRoute(pid))
+                },
+                onAnalysisClick = { analysisId ->
+                    navController.navigate(Screen.AnalysisDetail.createRoute(analysisId))
+                }
+            )
+        }
+
+        composable(Screen.AnalysisDetail.route) { backStackEntry ->
+            val analysisId = backStackEntry.arguments?.getString("analysisId")?.toLongOrNull()
+            if (analysisId != null) {
+                AnalysisDetailScreen(
+                    analysisId = analysisId,
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+        }
+
+        composable(
+            route = Screen.UploadAnalysis.route,
+            arguments = listOf(navArgument("patientId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val patientId = backStackEntry.arguments?.getLong("patientId") ?: return@composable
+            UploadAnalysisScreen(
+                patientId = patientId,
+                onAnalysisUploaded = {
+                    navController.popBackStack()
+                },
+                onBack = {
+                    navController.popBackStack()
                 }
             )
         }
