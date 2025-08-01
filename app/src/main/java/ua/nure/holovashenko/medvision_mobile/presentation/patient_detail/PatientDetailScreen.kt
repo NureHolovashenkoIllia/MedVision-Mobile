@@ -17,13 +17,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import ua.nure.holovashenko.medvision_mobile.R
+import ua.nure.holovashenko.medvision_mobile.presentation.common.BreadcrumbNavigation
 
 @Composable
 fun PatientDetailScreen(
@@ -45,7 +50,14 @@ fun PatientDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Пацієнт") },
+                title = { Text(stringResource(R.string.app_name)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ),
+                modifier = Modifier.shadow(4.dp),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
@@ -68,6 +80,15 @@ fun PatientDetailScreen(
                     Text("Помилка: $error", color = MaterialTheme.colorScheme.error)
                 }
                 else -> {
+                    BreadcrumbNavigation(
+                        path = listOf(
+                            "Пацієнти" to onBackClick
+                        ),
+                        current = "Аналізи"
+                    )
+
+                    Spacer(Modifier.height(4.dp))
+
                     if (patient != null) {
                         Text("Ім'я: ${patient!!.user.userName}")
                         Text("Email: ${patient!!.user.email}")

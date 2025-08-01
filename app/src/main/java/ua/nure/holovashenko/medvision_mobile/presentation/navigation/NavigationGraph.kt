@@ -111,7 +111,7 @@ fun NavigationGraph(
                 onAnalysisUploaded = {
                     navController.popBackStack()
                 },
-                onBack = {
+                onBackClick = {
                     navController.popBackStack()
                 }
             )

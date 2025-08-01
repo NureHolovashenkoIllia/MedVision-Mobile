@@ -8,8 +8,10 @@ import ua.nure.holovashenko.medvision_mobile.data.repository.AnalysisRepositoryI
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AuthRepository
 import ua.nure.holovashenko.medvision_mobile.data.repository.AuthRepositoryImpl
 import ua.nure.holovashenko.medvision_mobile.data.repository.DoctorRepositoryImpl
+import ua.nure.holovashenko.medvision_mobile.data.repository.UserRepositoryImpl
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AnalysisRepository
 import ua.nure.holovashenko.medvision_mobile.domain.repository.DoctorRepository
+import ua.nure.holovashenko.medvision_mobile.domain.repository.UserRepository
 import javax.inject.Singleton
 
 @Module
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindAnalysisRepository(
         impl: AnalysisRepositoryImpl
     ): AnalysisRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        impl: UserRepositoryImpl
+    ): UserRepository
 }
