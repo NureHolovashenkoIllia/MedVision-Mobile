@@ -1,6 +1,7 @@
 package ua.nure.holovashenko.medvision_mobile.data.repository
 
 import ua.nure.holovashenko.medvision_mobile.data.remote.datasource.AnalysisRemoteDataSource
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.ComparisonReport
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AnalysisRepository
 import javax.inject.Inject
@@ -18,5 +19,17 @@ class AnalysisRepositoryImpl @Inject constructor(
         val response = remote.getAnalysisById(id)
         if (response.isSuccessful) response.body()!!
         else throw Exception("Аналіз не знайдено")
+    }
+
+    override suspend fun compareAnalyses(fromId: Long, toId: Long): Result<ComparisonReport> = runCatching {
+        val response = remote.compareAnalyses(fromId, toId)
+        if (response.isSuccessful) response.body() ?: throw Exception("Порожній звіт")
+        else throw Exception("Помилка порівняння: ${response.code()}")
+    }
+
+    override suspend fun downloadComparisonPdf(fromId: Long, toId: Long): Result<ByteArray> = runCatching {
+        val response = remote.downloadComparisonPdf(fromId, toId)
+        if (response.isSuccessful) response.body()!!.bytes()
+        else throw Exception("Помилка PDF: ${response.code()}")
     }
 }
