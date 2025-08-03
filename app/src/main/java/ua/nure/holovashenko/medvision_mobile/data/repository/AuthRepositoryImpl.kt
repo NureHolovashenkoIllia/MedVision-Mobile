@@ -25,7 +25,11 @@ class AuthRepositoryImpl @Inject constructor(
         return remoteDataSource.login(request).fold(
             onSuccess = {
                 authPreferences.saveToken(it.token)
-                val role = parseRoleFromToken(it.token)
+                val (role, userId) = parseRoleFromToken(it.token)
+                if (role == UserRole.DOCTOR && userId != null) {
+                    authPreferences.saveDoctorId(userId)
+                }
+
                 if (role != null) {
                     AuthResult.Success(role)
                 } else {
@@ -42,7 +46,7 @@ class AuthRepositoryImpl @Inject constructor(
         return remoteDataSource.registerPatient(request).fold(
             onSuccess = {
                 authPreferences.saveToken(it.token)
-                val role = parseRoleFromToken(it.token)
+                val (role, _) = parseRoleFromToken(it.token)
                 if (role != null) {
                     AuthResult.Success(role)
                 } else {
@@ -148,14 +152,14 @@ class AuthRepositoryImpl @Inject constructor(
             }
         }
 
-    private fun parseRoleFromToken(token: String): UserRole? {
+    private fun parseRoleFromToken(token: String): Pair<UserRole?, Long?> {
         val TAG = "JwtParser"
 
         return try {
             val parts = token.split(".")
             if (parts.size != 3) {
                 Log.w(TAG, "Token does not have 3 parts: $token")
-                return null
+                return Pair(null, null)
             }
 
             val payload = parts[1]
@@ -165,25 +169,18 @@ class AuthRepositoryImpl @Inject constructor(
             Log.d(TAG, "Decoded JWT payload: $json")
 
             val roleRegex = Regex("\"role\"\\s*:\\s*\"(\\w+)\"")
-            val match = roleRegex.find(json)
+            val idRegex = Regex("\"userId\"\\s*:\\s*(\\d+)")
 
-            if (match == null) {
-                Log.w(TAG, "Role not found in payload")
-                return null
-            }
+            val role = roleRegex.find(json)?.groups?.get(1)?.value?.let { UserRole.fromString(it) }
+            val userId = idRegex.find(json)?.groups?.get(1)?.value?.toLongOrNull()
 
-            val roleString = match.groups[1]?.value
-            Log.d(TAG, "Extracted role string: $roleString")
+            Log.d(TAG, "Extracted role string: ${role.toString()}")
+            Log.d(TAG, "Extracted userId string: ${userId.toString()}")
 
-            val role = UserRole.fromString(roleString)
-            if (role == null) {
-                Log.w(TAG, "Unknown role value: $roleString")
-            }
-
-            role
+            Pair(role, userId)
         } catch (e: Exception) {
             Log.e(TAG, "Failed to parse role from token", e)
-            null
+            Pair(null, null)
         }
     }
 }

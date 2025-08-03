@@ -1,6 +1,7 @@
 package ua.nure.holovashenko.medvision_mobile.data.remote.api
 
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
@@ -15,14 +16,14 @@ interface DoctorApi {
         @Part file: MultipartBody.Part,
         @Part("patientId") patientId: Long,
         @Part("doctorId") doctorId: Long
-    ): Response<String>
+    ): Response<ResponseBody>
 
     @GET("doctor/analysis/{id}")
     suspend fun getAnalysis(@Path("id") id: Long): Response<ImageAnalysisResponse>
 
     @GET("doctor/heatmap/{id}")
     @Streaming
-    suspend fun getHeatmap(@Path("id") id: Long): Response<okhttp3.ResponseBody>
+    suspend fun getHeatmap(@Path("id") id: Long): Response<ResponseBody>
 
     @POST("doctor/analysis/{id}/diagnosis")
     suspend fun updateDiagnosis(

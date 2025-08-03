@@ -15,8 +15,11 @@ class DoctorRepositoryImpl @Inject constructor(
     override suspend fun uploadAndAnalyzeImage(file: MultipartBody.Part, patientId: Long, doctorId: Long): Result<String> {
         return runCatching {
             val response = remote.uploadAndAnalyzeImage(file, patientId, doctorId)
-            if (response.isSuccessful) response.body()!!
-            else throw Exception("Upload failed: ${response.code()}")
+            if (response.isSuccessful) {
+                response.body()?.string() ?: throw Exception("Empty response body")
+            } else {
+                throw Exception("Upload failed: ${response.code()}")
+            }
         }
     }
 
