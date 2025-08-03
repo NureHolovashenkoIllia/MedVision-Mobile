@@ -3,6 +3,8 @@ package ua.nure.holovashenko.medvision_mobile.data.repository
 import okhttp3.MultipartBody
 import ua.nure.holovashenko.medvision_mobile.data.remote.datasource.DoctorRemoteDataSource
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientResponse
 import ua.nure.holovashenko.medvision_mobile.domain.repository.DoctorRepository
@@ -35,9 +37,10 @@ class DoctorRepositoryImpl @Inject constructor(
         else throw Exception("Heatmap not found")
     }
 
-    override suspend fun updateDiagnosis(id: Long, diagnosis: String): Result<Unit> = runCatching {
-        val response = remote.updateDiagnosis(id, diagnosis)
-        if (!response.isSuccessful) throw Exception("Update failed")
+    override suspend fun getImage(id: Long): Result<ByteArray> = runCatching {
+        val response = remote.getImage(id)
+        if (response.isSuccessful) response.body()!!.bytes()
+        else throw Exception("Image not found")
     }
 
     override suspend fun getAllPatients(): Result<List<PatientResponse>> = runCatching {
@@ -56,4 +59,19 @@ class DoctorRepositoryImpl @Inject constructor(
         val response = remote.addNote(analysisId, doctorId, request)
         if (!response.isSuccessful) throw Exception("Failed to add note")
     }
+
+    override suspend fun updateDiagnosis(
+        request: DiagnosisHistoryRequest
+    ): Result<DiagnosisHistoryResponse> = runCatching {
+        val response = remote.updateDiagnosis(request)
+        if (!response.isSuccessful) throw Exception("Update failed")
+        response.body()!!
+    }
+
+    override suspend fun getDiagnosisHistory(analysisId: Long): Result<List<DiagnosisHistoryResponse>> =
+        runCatching {
+            val response = remote.getDiagnosisHistory(analysisId)
+            if (response.isSuccessful) response.body()!!
+            else throw Exception("Failed to fetch diagnosis history")
+        }
 }

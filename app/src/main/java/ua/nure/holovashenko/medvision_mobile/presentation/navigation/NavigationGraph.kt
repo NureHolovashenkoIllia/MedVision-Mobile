@@ -97,16 +97,28 @@ fun NavigationGraph(
                     }
                 },
                 onAnalysisClick = { analysisId ->
-                    navController.navigate(Screen.AnalysisDetail.createRoute(analysisId))
+                    scope.launch {
+                        val doctorId = AuthPreferences(context).getDoctorId()
+                        if (doctorId != null) {
+                            navController.navigate(Screen.AnalysisDetail.createRoute(analysisId, doctorId))
+                        }
+                    }
                 }
             )
         }
 
-        composable(Screen.AnalysisDetail.route) { backStackEntry ->
+        composable(
+            route = Screen.AnalysisDetail.route,
+            arguments = listOf(
+                navArgument("doctorId") { type = NavType.LongType}
+            )
+        ) { backStackEntry ->
             val analysisId = backStackEntry.arguments?.getString("analysisId")?.toLongOrNull()
+            val doctorId = backStackEntry.arguments?.getLong("doctorId") ?: return@composable
             if (analysisId != null) {
                 AnalysisDetailScreen(
                     analysisId = analysisId,
+                    doctorId = doctorId,
                     onBackClick = { navController.popBackStack() }
                 )
             }

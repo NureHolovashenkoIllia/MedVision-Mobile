@@ -39,7 +39,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -76,6 +75,8 @@ import ua.nure.holovashenko.medvision_mobile.data.remote.model.ComparisonReport
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientResponse
 import ua.nure.holovashenko.medvision_mobile.presentation.common.BreadcrumbNavigation
+import ua.nure.holovashenko.medvision_mobile.presentation.common.InfoRow
+import ua.nure.holovashenko.medvision_mobile.presentation.common.Loading
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -160,14 +161,14 @@ fun PatientDetailScreen(
             if (patient != null) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp)
+                    contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp)
                 ) {
                     item {
                         BreadcrumbNavigation(
                             path = listOf("Пацієнти" to onBackClick),
                             current = "Дослідження"
                         )
-                        Spacer(Modifier.height(8.dp))
+                        Spacer(Modifier.height(16.dp))
                         PatientInfoCard(patient = patient!!, avatar = avatar)
                         Spacer(Modifier.height(16.dp))
                         Text("Дослідження", style = MaterialTheme.typography.titleLarge)
@@ -254,22 +255,7 @@ fun PatientDetailScreen(
             }
 
             if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.8f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                        Spacer(Modifier.height(16.dp))
-                        Text(
-                            text = "Завантаження даних...",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
+                Loading("Завантаження даних...")
             }
 
             BottomActionBar(
@@ -359,20 +345,6 @@ fun PatientInfoCard(patient: PatientResponse, avatar: ByteArray?) {
 }
 
 @Composable
-private fun InfoRow(label: String, value: String) {
-    Column(Modifier.padding(vertical = 4.dp)) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.outline
-        )
-        if (value.isNotBlank()) {
-            Text(text = value, style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-
-@Composable
 private fun EmptyAnalysesState(onAddAnalysisClick: () -> Unit) {
     Column(
         modifier = Modifier
@@ -444,7 +416,7 @@ fun AnalysisCard(
 
                 Column(Modifier.weight(1f)) {
                     InfoRow("Дата", formatDateTime(analysis.creationDatetime))
-                    InfoRow("Статус", analysis.analysisStatus)
+                    InfoRow("Статус", analysis.analysisStatus.toString())
                 }
 
                 Checkbox(

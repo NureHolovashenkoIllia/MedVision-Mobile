@@ -3,6 +3,7 @@ package ua.nure.holovashenko.medvision_mobile.data.repository
 import ua.nure.holovashenko.medvision_mobile.data.remote.datasource.AnalysisRemoteDataSource
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ComparisonReport
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.UpdateStatusRequest
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AnalysisRepository
 import javax.inject.Inject
 
@@ -32,4 +33,10 @@ class AnalysisRepositoryImpl @Inject constructor(
         if (response.isSuccessful) response.body()!!.bytes()
         else throw Exception("Помилка PDF: ${response.code()}")
     }
+
+    override suspend fun updateAnalysisStatus(id: Long, status: UpdateStatusRequest): Result<Unit> =
+        runCatching {
+            val response = remote.updateAnalysisStatus(id, status)
+            if (!response.isSuccessful) throw Exception("Не вдалося оновити статус аналізу")
+        }
 }

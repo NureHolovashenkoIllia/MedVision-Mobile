@@ -1,6 +1,7 @@
 package ua.nure.holovashenko.medvision_mobile.data.remote.datasource
 
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.AnalysisApi
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.UpdateStatusRequest
 import javax.inject.Inject
 
 class AnalysisRemoteDataSource @Inject constructor(
@@ -17,4 +18,7 @@ class AnalysisRemoteDataSource @Inject constructor(
 
     suspend fun downloadComparisonPdf(fromId: Long, toId: Long) =
         api.downloadComparisonPdf(fromId, toId)
+
+    suspend fun updateAnalysisStatus(id: Long, status: UpdateStatusRequest) =
+        api.updateAnalysisStatus(id, status)
 }

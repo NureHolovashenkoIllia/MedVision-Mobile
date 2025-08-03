@@ -2,12 +2,15 @@ package ua.nure.holovashenko.medvision_mobile.data.remote.api
 
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Streaming
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ComparisonReport
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.UpdateStatusRequest
 
 interface AnalysisApi {
 
@@ -23,4 +26,7 @@ interface AnalysisApi {
     @GET("analysis/compare/pdf")
     @Streaming
     suspend fun downloadComparisonPdf(@Query("fromId") fromId: Long, @Query("toId") toId: Long): Response<ResponseBody>
+
+    @PATCH("analysis/{id}/status")
+    suspend fun updateAnalysisStatus(@Path("id") id: Long, @Body request: UpdateStatusRequest): Response<Void>
 }

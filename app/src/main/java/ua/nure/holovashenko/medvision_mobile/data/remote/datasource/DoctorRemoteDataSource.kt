@@ -3,6 +3,7 @@ package ua.nure.holovashenko.medvision_mobile.data.remote.datasource
 import okhttp3.MultipartBody
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.DoctorApi
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import javax.inject.Inject
 
 class DoctorRemoteDataSource @Inject constructor(
@@ -16,7 +17,7 @@ class DoctorRemoteDataSource @Inject constructor(
 
     suspend fun getHeatmap(id: Long) = api.getHeatmap(id)
 
-    suspend fun updateDiagnosis(id: Long, diagnosis: String) = api.updateDiagnosis(id, diagnosis)
+    suspend fun getImage(id: Long) = api.getImage(id)
 
     suspend fun getAllPatients() = api.getAllPatients()
 
@@ -24,4 +25,10 @@ class DoctorRemoteDataSource @Inject constructor(
 
     suspend fun addNote(analysisId: Long, doctorId: Long, request: AddNoteRequest) =
         api.addNote(analysisId, doctorId, request)
+
+    suspend fun updateDiagnosis(request: DiagnosisHistoryRequest) =
+        api.updateDiagnosis(request)
+
+    suspend fun getDiagnosisHistory(analysisId: Long) =
+        api.getDiagnosisHistory(analysisId)
 }

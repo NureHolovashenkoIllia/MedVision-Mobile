@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import ua.nure.holovashenko.medvision_mobile.R
 import ua.nure.holovashenko.medvision_mobile.presentation.common.BreadcrumbNavigation
+import ua.nure.holovashenko.medvision_mobile.presentation.common.Loading
 
 @Composable
 fun UploadAnalysisScreen(
@@ -174,18 +174,7 @@ fun UploadAnalysisScreen(
             }
 
             if (isLoading) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.6f)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator()
-                        Spacer(Modifier.height(12.dp))
-                        Text("Опрацювання зображення…", style = MaterialTheme.typography.bodyLarge)
-                    }
-                }
+                Loading("Опрацювання зображення…")
             }
         }
     }

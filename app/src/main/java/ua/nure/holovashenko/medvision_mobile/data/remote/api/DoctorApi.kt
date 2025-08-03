@@ -5,6 +5,8 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientResponse
 
@@ -25,11 +27,9 @@ interface DoctorApi {
     @Streaming
     suspend fun getHeatmap(@Path("id") id: Long): Response<ResponseBody>
 
-    @POST("doctor/analysis/{id}/diagnosis")
-    suspend fun updateDiagnosis(
-        @Path("id") id: Long,
-        @Body diagnosis: String
-    ): Response<Unit>
+    @GET("doctor/image/{id}")
+    @Streaming
+    suspend fun getImage(@Path("id") id: Long): Response<ResponseBody>
 
     @GET("doctor/patients")
     suspend fun getAllPatients(): Response<List<PatientResponse>>
@@ -43,4 +43,12 @@ interface DoctorApi {
         @Query("doctorId") doctorId: Long,
         @Body noteRequest: AddNoteRequest
     ): Response<Unit>
+
+    @POST("diagnosis")
+    suspend fun updateDiagnosis(
+        @Body request: DiagnosisHistoryRequest
+    ): Response<DiagnosisHistoryResponse>
+
+    @GET("diagnosis/analysis/{analysisId}")
+    suspend fun getDiagnosisHistory(@Path("analysisId") id: Long): Response<List<DiagnosisHistoryResponse>>
 }

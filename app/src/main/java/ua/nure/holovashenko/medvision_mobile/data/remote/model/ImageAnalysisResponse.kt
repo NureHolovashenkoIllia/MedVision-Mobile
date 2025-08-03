@@ -1,5 +1,7 @@
 package ua.nure.holovashenko.medvision_mobile.data.remote.model
 
+import ua.nure.holovashenko.medvision_mobile.domain.model.AnalysisStatus
+
 data class ImageAnalysisResponse(
     val imageAnalysisId: Long,
     val analysisAccuracy: Float?,
@@ -9,7 +11,7 @@ data class ImageAnalysisResponse(
     val analysisDiagnosis: String?,
     val treatmentRecommendations: String?,
     val creationDatetime: String,
-    val analysisStatus: String,
+    val analysisStatus: AnalysisStatus,
     val viewed: Boolean,
     val diagnosisClass: Int?,
     val imageFile: ImageFileResponse?,
