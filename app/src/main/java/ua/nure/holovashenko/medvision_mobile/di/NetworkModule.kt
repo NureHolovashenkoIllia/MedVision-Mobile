@@ -14,6 +14,7 @@ import ua.nure.holovashenko.medvision_mobile.data.local.AuthPreferences
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.AnalysisApi
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.AuthApi
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.DoctorApi
+import ua.nure.holovashenko.medvision_mobile.data.remote.api.PatientApi
 import ua.nure.holovashenko.medvision_mobile.data.remote.api.UserApi
 import javax.inject.Singleton
 
@@ -74,4 +75,8 @@ object NetworkModule {
     @Provides
     fun provideUserApi(retrofit: Retrofit): UserApi =
         retrofit.create(UserApi::class.java)
+
+    @Provides
+    fun providePatientApi(retrofit: Retrofit): PatientApi =
+        retrofit.create(PatientApi::class.java)
 }
