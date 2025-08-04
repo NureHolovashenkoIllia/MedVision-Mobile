@@ -53,6 +53,7 @@ import ua.nure.holovashenko.medvision_mobile.presentation.patient_detail.formatD
 @Composable
 fun PatientPanelScreen(
     onProfileClick: () -> Unit,
+    onAnalysisClick: (Long) -> Unit,
     viewModel: PatientPanelViewModel = hiltViewModel()
 ) {
     val analyses by viewModel.filteredAnalyses.collectAsState()
@@ -130,6 +131,7 @@ fun PatientPanelScreen(
                                         ) },
                                         onClick = {
                                             showDropdown = false
+                                            onAnalysisClick(it.imageAnalysisId)
                                         }
                                     )
                                 }
@@ -168,7 +170,7 @@ fun PatientPanelScreen(
                         val heatmapBytes = heatmaps[analysis.imageAnalysisId]
                         AnalysisCard(
                             analysis = analysis,
-                            onClick = {  },
+                            onClick = { onAnalysisClick(analysis.imageAnalysisId) },
                             heatmapBytes = heatmapBytes
                         )
                     }

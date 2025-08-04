@@ -16,6 +16,7 @@ import ua.nure.holovashenko.medvision_mobile.presentation.analysis_detail.Analys
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.LoginScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.auth.RegistrationScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.doctor_panel.DoctorPanelScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.patient_analysis_detail.PatientAnalysisDetailScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_detail.PatientDetailScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_panel.PatientPanelScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.profile.ProfileScreen
@@ -62,7 +63,21 @@ fun NavigationGraph(
             PatientPanelScreen(
                 onProfileClick = {
                     navController.navigate(Screen.Profile.route)
+                },
+                onAnalysisClick = { analysisId ->
+                    navController.navigate(Screen.PatientAnalysisDetail.createRoute(analysisId))
                 }
+            )
+        }
+
+        composable(
+            route = Screen.PatientAnalysisDetail.route,
+            arguments = listOf(navArgument("analysisId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val analysisId = backStackEntry.arguments?.getLong("analysisId") ?: return@composable
+            PatientAnalysisDetailScreen(
+                analysisId = analysisId,
+                onBackClick = { navController.popBackStack() }
             )
         }
 

@@ -59,14 +59,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
@@ -74,6 +71,7 @@ import ua.nure.holovashenko.medvision_mobile.R
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ComparisonReport
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientResponse
+import ua.nure.holovashenko.medvision_mobile.presentation.common.ActionButton
 import ua.nure.holovashenko.medvision_mobile.presentation.common.BreadcrumbNavigation
 import ua.nure.holovashenko.medvision_mobile.presentation.common.InfoRow
 import ua.nure.holovashenko.medvision_mobile.presentation.common.Loading
@@ -263,7 +261,7 @@ fun PatientDetailScreen(
                 onCompareClick = { viewModel.compareSelectedAnalyses() },
                 onDownloadClick = {
                     viewModel.downloadComparisonPdf { data ->
-                        savePdfFile(context = context, data = data)
+                        savePdfFile(context = context, data = data, fileName = "analysis_comparison_${System.currentTimeMillis()}.pdf")
                     }
                 },
                 modifier = Modifier
@@ -434,40 +432,6 @@ fun AnalysisCard(
 }
 
 @Composable
-private fun ActionButton(
-    text: String,
-    painter: Painter,
-    onClick: () -> Unit,
-    backgroundColor: Color,
-    contentColor: Color,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(28.dp))
-            .clip(RoundedCornerShape(28.dp))
-            .background(backgroundColor)
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = text,
-            tint = contentColor,
-            modifier = Modifier.size(24.dp)
-        )
-        Text(
-            text = text,
-            color = contentColor,
-            style = MaterialTheme.typography.labelLarge,
-            fontSize = 14.sp
-        )
-    }
-}
-
-@Composable
 fun BottomActionBar(
     visible: Boolean,
     onCompareClick: () -> Unit,
@@ -608,8 +572,7 @@ fun firstWord(text: String): String = text.substringBefore(" ")
 
 fun formatDouble(value: Double?): String = value?.let { String.format("%.3f", it) } ?: "-"
 
-fun savePdfFile(context: Context, data: ByteArray) {
-    val fileName = "analysis_comparison_${System.currentTimeMillis()}.pdf"
+fun savePdfFile(context: Context, data: ByteArray, fileName: String) {
     val outputStream: OutputStream
 
     try {
