@@ -14,6 +14,7 @@ import ua.nure.holovashenko.medvision_mobile.domain.model.AuthResult
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserProfile
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AuthRepository
+import ua.nure.holovashenko.medvision_mobile.util.parseRoleFromToken
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
@@ -151,36 +152,4 @@ class AuthRepositoryImpl @Inject constructor(
                 throw IllegalStateException("Помилка ${response.code()}: ${response.errorBody()?.string()}")
             }
         }
-
-    private fun parseRoleFromToken(token: String): Pair<UserRole?, Long?> {
-        val TAG = "JwtParser"
-
-        return try {
-            val parts = token.split(".")
-            if (parts.size != 3) {
-                Log.w(TAG, "Token does not have 3 parts: $token")
-                return Pair(null, null)
-            }
-
-            val payload = parts[1]
-            val decodedBytes = android.util.Base64.decode(payload, android.util.Base64.URL_SAFE or android.util.Base64.NO_WRAP)
-            val json = String(decodedBytes, Charsets.UTF_8)
-
-            Log.d(TAG, "Decoded JWT payload: $json")
-
-            val roleRegex = Regex("\"role\"\\s*:\\s*\"(\\w+)\"")
-            val idRegex = Regex("\"userId\"\\s*:\\s*(\\d+)")
-
-            val role = roleRegex.find(json)?.groups?.get(1)?.value?.let { UserRole.fromString(it) }
-            val userId = idRegex.find(json)?.groups?.get(1)?.value?.toLongOrNull()
-
-            Log.d(TAG, "Extracted role string: ${role.toString()}")
-            Log.d(TAG, "Extracted userId string: ${userId.toString()}")
-
-            Pair(role, userId)
-        } catch (e: Exception) {
-            Log.e(TAG, "Failed to parse role from token", e)
-            Pair(null, null)
-        }
-    }
 }

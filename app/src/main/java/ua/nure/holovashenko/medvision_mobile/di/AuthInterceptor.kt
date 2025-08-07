@@ -1,7 +1,5 @@
 package ua.nure.holovashenko.medvision_mobile.di
 
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 import ua.nure.holovashenko.medvision_mobile.data.local.AuthPreferences
@@ -14,9 +12,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
 
-        val token = runBlocking {
-            authPreferences.tokenFlow.firstOrNull()
-        }
+        val token = authPreferences.getToken()
 
         token?.let {
             requestBuilder.addHeader("Authorization", "Bearer $it")

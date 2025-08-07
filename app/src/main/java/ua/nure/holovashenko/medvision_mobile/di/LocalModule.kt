@@ -1,6 +1,9 @@
 package ua.nure.holovashenko.medvision_mobile.di
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +18,23 @@ object LocalModule {
 
     @Provides
     @Singleton
-    fun provideAuthPreferences(@ApplicationContext context: Context): AuthPreferences {
-        return AuthPreferences(context)
+    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        val masterKey = MasterKey.Builder(context)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        return EncryptedSharedPreferences.create(
+            context,
+            "secure_auth_prefs",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthPreferences(prefs: SharedPreferences): AuthPreferences {
+        return AuthPreferences(prefs)
     }
 }

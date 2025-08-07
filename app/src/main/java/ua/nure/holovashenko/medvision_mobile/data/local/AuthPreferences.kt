@@ -1,40 +1,41 @@
 package ua.nure.holovashenko.medvision_mobile.data.local
 
-import android.content.Context
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.longPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
+import android.content.SharedPreferences
 import javax.inject.Inject
+import javax.inject.Singleton
+import androidx.core.content.edit
 
-val Context.authDataStore by preferencesDataStore(name = "auth_prefs")
-
-class AuthPreferences @Inject constructor(@ApplicationContext context: Context) {
-
-    private val dataStore = context.authDataStore
-
-    private val TOKEN_KEY = stringPreferencesKey("jwt_token")
-    private val DOCTOR_ID_KEY = longPreferencesKey("doctor_id")
-
-    val tokenFlow: Flow<String?> = dataStore.data.map { it[TOKEN_KEY] }
-
-    suspend fun saveToken(token: String) {
-        dataStore.edit { it[TOKEN_KEY] = token }
+@Singleton
+class AuthPreferences @Inject constructor(
+    private val prefs: SharedPreferences
+) {
+    companion object {
+        private const val TOKEN_KEY = "jwt_token"
+        private const val DOCTOR_ID_KEY = "doctor_id"
     }
 
-    suspend fun clearToken() {
-        dataStore.edit { it.remove(TOKEN_KEY) }
+    fun saveToken(token: String) {
+        prefs.edit { putString(TOKEN_KEY, token) }
     }
 
-    suspend fun saveDoctorId(id: Long) {
-        dataStore.edit { it[DOCTOR_ID_KEY] = id }
+    fun getToken(): String? {
+        return prefs.getString(TOKEN_KEY, null)
     }
 
-    suspend fun getDoctorId(): Long? {
-        return dataStore.data.map { it[DOCTOR_ID_KEY] }.firstOrNull()
+    fun clearToken() {
+        prefs.edit { remove(TOKEN_KEY) }
+    }
+
+    fun saveDoctorId(id: Long) {
+        prefs.edit { putLong(DOCTOR_ID_KEY, id) }
+    }
+
+    fun getDoctorId(): Long? {
+        val id = prefs.getLong(DOCTOR_ID_KEY, -1L)
+        return if (id != -1L) id else null
+    }
+
+    fun clearAll() {
+        prefs.edit { clear() }
     }
 }

@@ -1,6 +1,7 @@
 package ua.nure.holovashenko.medvision_mobile.presentation.navigation
 
 sealed class Screen(val route: String) {
+    object Splash : Screen("splash")
     object Auth : Screen("auth")
     object Registration : Screen("registration")
     object PatientPanel : Screen("patient")

@@ -2,7 +2,6 @@ package ua.nure.holovashenko.medvision_mobile.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -20,13 +19,36 @@ import ua.nure.holovashenko.medvision_mobile.presentation.patient_analysis_detai
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_detail.PatientDetailScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_panel.PatientPanelScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.profile.ProfileScreen
+import ua.nure.holovashenko.medvision_mobile.presentation.splash.SplashScreen
 import ua.nure.holovashenko.medvision_mobile.presentation.upload_analysis.UploadAnalysisScreen
 
 @Composable
 fun NavigationGraph(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    authPreferences: AuthPreferences
 ) {
-    NavHost(navController = navController, startDestination = Screen.Auth.route) {
+    NavHost(navController = navController, startDestination = Screen.Splash.route) {
+
+        composable(Screen.Splash.route) {
+            SplashScreen(
+                authPreferences = authPreferences,
+                onNavigateToLogin = {
+                    navController.navigate(Screen.Auth.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToDoctorPanel = {
+                    navController.navigate(Screen.DoctorPanel.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToPatientPanel = {
+                    navController.navigate(Screen.PatientPanel.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable(Screen.Auth.route) {
             LoginScreen(
@@ -38,6 +60,7 @@ fun NavigationGraph(
                         UserRole.PATIENT -> navController.navigate(Screen.PatientPanel.route) {
                             popUpTo(Screen.Auth.route) { inclusive = true }
                         }
+
                         UserRole.DOCTOR -> navController.navigate(Screen.DoctorPanel.route) {
                             popUpTo(Screen.Auth.route) { inclusive = true }
                         }
@@ -97,7 +120,6 @@ fun NavigationGraph(
             route = Screen.PatientDetail.route,
             arguments = listOf(navArgument("patientId") { type = NavType.LongType })
         ) { backStackEntry ->
-            val context = LocalContext.current
             val scope = rememberCoroutineScope()
             val patientId = backStackEntry.arguments?.getLong("patientId") ?: return@composable
             PatientDetailScreen(
@@ -105,7 +127,7 @@ fun NavigationGraph(
                 onBackClick = { navController.popBackStack() },
                 onAddAnalysisClick = { pid ->
                     scope.launch {
-                        val doctorId = AuthPreferences(context).getDoctorId()
+                        val doctorId = authPreferences.getDoctorId()
                         if (doctorId != null) {
                             navController.navigate(Screen.UploadAnalysis.createRoute(pid, doctorId))
                         }
@@ -113,9 +135,11 @@ fun NavigationGraph(
                 },
                 onAnalysisClick = { analysisId ->
                     scope.launch {
-                        val doctorId = AuthPreferences(context).getDoctorId()
+                        val doctorId = authPreferences.getDoctorId()
                         if (doctorId != null) {
-                            navController.navigate(Screen.AnalysisDetail.createRoute(analysisId, doctorId))
+                            navController.navigate(
+                                Screen.AnalysisDetail.createRoute(analysisId, doctorId)
+                            )
                         }
                     }
                 }
@@ -125,7 +149,7 @@ fun NavigationGraph(
         composable(
             route = Screen.AnalysisDetail.route,
             arguments = listOf(
-                navArgument("doctorId") { type = NavType.LongType}
+                navArgument("doctorId") { type = NavType.LongType }
             )
         ) { backStackEntry ->
             val analysisId = backStackEntry.arguments?.getString("analysisId")?.toLongOrNull()
@@ -157,12 +181,17 @@ fun NavigationGraph(
         }
 
         composable(Screen.Profile.route) {
+            val scope = rememberCoroutineScope()
             ProfileScreen(
                 onLogout = {
-                    navController.navigate(Screen.Auth.route) {
-                    popUpTo(0)
+                    scope.launch {
+                        authPreferences.clearAll()
+
+                        navController.navigate(Screen.Auth.route) {
+                            popUpTo(0)
+                        }
                     }
-                           },
+                },
                 onBack = {
                     navController.popBackStack()
                 })
