@@ -3,6 +3,7 @@ package ua.nure.holovashenko.medvision_mobile.data.repository
 import okhttp3.MultipartBody
 import ua.nure.holovashenko.medvision_mobile.data.remote.datasource.DoctorRemoteDataSource
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AnalysisNoteResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
@@ -73,5 +74,12 @@ class DoctorRepositoryImpl @Inject constructor(
             val response = remote.getDiagnosisHistory(analysisId)
             if (response.isSuccessful) response.body()!!
             else throw Exception("Failed to fetch diagnosis history")
+        }
+
+    override suspend fun getAnalysisNotes(analysisId: Long): Result<List<AnalysisNoteResponse>> =
+        runCatching {
+            val response = remote.getAnalysisNotes(analysisId)
+            if (response.isSuccessful) response.body()!!
+            else throw Exception("Failed to fetch analysis notes")
         }
 }

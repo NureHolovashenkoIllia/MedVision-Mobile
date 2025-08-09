@@ -13,6 +13,9 @@ import ua.nure.holovashenko.medvision_mobile.data.remote.model.PatientResponse
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AnalysisRepository
 import ua.nure.holovashenko.medvision_mobile.domain.repository.DoctorRepository
 import ua.nure.holovashenko.medvision_mobile.domain.repository.UserRepository
+import java.time.LocalDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +73,12 @@ class PatientDetailViewModel @Inject constructor(
             }
 
             analysesResult.onSuccess { list ->
-                _analyses.value = list
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+
+                _analyses.value = list.sortedByDescending { analysis ->
+                    LocalDateTime.parse(analysis.creationDatetime, formatter)
+                        .toInstant(ZoneOffset.UTC)
+                }
                 list.forEach { loadHeatmap(it.imageAnalysisId) }
             }.onFailure {
                 error.value = it.message

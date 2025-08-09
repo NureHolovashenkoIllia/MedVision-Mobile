@@ -2,6 +2,7 @@ package ua.nure.holovashenko.medvision_mobile.domain.repository
 
 import okhttp3.MultipartBody
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AnalysisNoteResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
@@ -25,4 +26,5 @@ interface DoctorRepository {
     ): Result<Unit>
     suspend fun updateDiagnosis(request: DiagnosisHistoryRequest): Result<DiagnosisHistoryResponse>
     suspend fun getDiagnosisHistory(analysisId: Long): Result<List<DiagnosisHistoryResponse>>
+    suspend fun getAnalysisNotes(analysisId: Long): Result<List<AnalysisNoteResponse>>
 }

@@ -5,13 +5,16 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -26,6 +29,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardDefaults.cardColors
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -53,8 +57,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,6 +68,8 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import ua.nure.holovashenko.medvision_mobile.R
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AnalysisNoteResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
@@ -70,6 +78,8 @@ import ua.nure.holovashenko.medvision_mobile.presentation.common.BreadcrumbNavig
 import ua.nure.holovashenko.medvision_mobile.presentation.common.InfoRow
 import ua.nure.holovashenko.medvision_mobile.presentation.common.Loading
 import ua.nure.holovashenko.medvision_mobile.presentation.patient_detail.formatDateTime
+import kotlin.math.abs
+import kotlin.math.min
 
 @Composable
 fun AnalysisDetailScreen(
@@ -79,6 +89,8 @@ fun AnalysisDetailScreen(
     viewModel: AnalysisDetailViewModel = hiltViewModel()
 ) {
     val analysis by viewModel.analysis.collectAsState()
+    val notes by viewModel.notes.collectAsState()
+    var selectedNoteId by remember { mutableStateOf<Long?>(null) }
     val imageBytes by viewModel.imageBytes.collectAsState()
     val heatmapBytes by viewModel.heatmapBytes.collectAsState()
     val diagnosisHistory by viewModel.diagnosisHistory.collectAsState()
@@ -160,15 +172,39 @@ fun AnalysisDetailScreen(
 
                             Spacer(Modifier.height(8.dp))
 
-                            Image(
-                                bitmap = imageBytes!!.toImageBitmap(),
-                                contentDescription = "Original Image",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(220.dp)
-                                    .shadow(2.dp),
-                                contentScale = ContentScale.Crop
+                            NotesImage(
+                                imageBytes = imageBytes!!,
+                                notes = notes,
+                                selectedNoteId = selectedNoteId,
+                                onAddNote = { request ->
+                                    viewModel.addNote(
+                                        analysis!!.imageAnalysisId,
+                                        doctorId,
+                                        request
+                                    )
+                                }
                             )
+
+                            Spacer(Modifier.height(8.dp))
+                            notes.forEach { note ->
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            selectedNoteId =
+                                                if (selectedNoteId == note.analysisNoteId) null else note.analysisNoteId
+                                        }
+                                        .padding(vertical = 4.dp),
+                                    shape = RoundedCornerShape(16.dp),
+                                    elevation = CardDefaults.cardElevation(4.dp),
+                                    colors = cardColors(
+                                        containerColor = if (selectedNoteId == note.analysisNoteId)
+                                            MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                                    )
+                                ) {
+                                    NoteCard(note)
+                                }
+                            }
 
                             Spacer(Modifier.height(16.dp))
                         }
@@ -387,6 +423,206 @@ private fun DiagnosisHistoryCard(item: DiagnosisHistoryResponse) {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun NotesImage(
+    imageBytes: ByteArray,
+    notes: List<AnalysisNoteResponse>,
+    selectedNoteId: Long?,
+    onAddNote: (AddNoteRequest) -> Unit
+) {
+    val density = LocalDensity.current
+    var startX by remember { mutableStateOf<Float?>(null) }
+    var startY by remember { mutableStateOf<Float?>(null) }
+    var endX by remember { mutableStateOf<Float?>(null) }
+    var endY by remember { mutableStateOf<Float?>(null) }
+
+    var showDialog by remember { mutableStateOf(false) }
+    var noteText by remember { mutableStateOf("") }
+
+    val imageBitmap = imageBytes.toImageBitmap()
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(300.dp)
+            .shadow(8.dp, RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(20.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDragStart = { offset ->
+                        startX = offset.x
+                        startY = offset.y
+                        endX = offset.x
+                        endY = offset.y
+                    },
+                    onDrag = { change, dragAmount ->
+                        change.consume()
+                        endX = (endX ?: startX!!) + dragAmount.x
+                        endY = (endY ?: startY!!) + dragAmount.y
+                    },
+                    onDragEnd = {
+                        if (startX != null && startY != null && endX != null && endY != null) {
+                            showDialog = true
+                        }
+                    }
+                )
+            }
+    ) {
+        Image(
+            bitmap = imageBitmap,
+            contentDescription = "CT Image with notes",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        val displayedNotes = selectedNoteId?.let { id ->
+            notes.filter { it.analysisNoteId == id }
+        } ?: emptyList()
+
+        displayedNotes.forEach { note ->
+            Box(
+                modifier = Modifier
+                    .offset(
+                        with(density) { note.noteAreaX.toDp() },
+                        with(density) { note.noteAreaY.toDp() }
+                    )
+                    .size(
+                        with(density) { note.noteAreaWidth.toDp() },
+                        with(density) { note.noteAreaHeight.toDp() }
+                    )
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f))
+            )
+        }
+
+        if (startX != null && startY != null && endX != null && endY != null && !showDialog) {
+            val left = min(startX!!, endX!!)
+            val top = min(startY!!, endY!!)
+            val width = abs(endX!! - startX!!)
+            val height = abs(endY!! - startY!!)
+
+            Box(
+                modifier = Modifier
+                    .offset(with(density) { left.toDp() }, with(density) { top.toDp() })
+                    .size(with(density) { width.toDp() }, with(density) { height.toDp() })
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
+            )
+        }
+    }
+
+    fun resetSelection() {
+        startX = null
+        startY = null
+        endX = null
+        endY = null
+    }
+
+    if (showDialog) {
+        AddNoteDialog(
+            noteText = noteText,
+            onNoteTextChange = { noteText = it },
+            onDismiss = {
+                resetSelection()
+                noteText = ""
+                showDialog = false
+            },
+            onSave = {
+                if (noteText.isNotBlank() && startX != null && startY != null && endX != null && endY != null) {
+                    onAddNote(
+                        AddNoteRequest(
+                            noteText = noteText,
+                            noteAreaX = startX?.toInt(),
+                            noteAreaY = startY?.toInt(),
+                            noteAreaWidth = (endX!! - startX!!).toInt(),
+                            noteAreaHeight = (endY!! - startY!!).toInt()
+                        )
+                    )
+                    resetSelection()
+                    noteText = ""
+                    showDialog = false
+                }
+            }
+        )
+    }
+}
+
+@Composable
+private fun AddNoteDialog(
+    noteText: String,
+    onNoteTextChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onSave: () -> Unit
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            shape = RoundedCornerShape(16.dp),
+            tonalElevation = 8.dp
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text("Додати нотатку", style = MaterialTheme.typography.titleLarge)
+
+                OutlinedTextField(
+                    value = noteText,
+                    onValueChange = onNoteTextChange,
+                    label = { Text("Текст нотатки") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text("Скасувати")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(onClick = onSave) {
+                        Text("Зберегти")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NoteCard(note: AnalysisNoteResponse) {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Row {
+            Column(Modifier.weight(1f)) {
+                Text(
+                    text = "Нотатка #${note.analysisNoteId}",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            Text(
+                text = formatDateTime(note.creationDatetime),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            text = note.noteText,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
     }
 }
 

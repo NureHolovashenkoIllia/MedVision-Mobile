@@ -5,6 +5,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.*
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AnalysisNoteResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
@@ -51,4 +52,7 @@ interface DoctorApi {
 
     @GET("diagnosis/analysis/{analysisId}")
     suspend fun getDiagnosisHistory(@Path("analysisId") id: Long): Response<List<DiagnosisHistoryResponse>>
+
+    @GET("analysis-note/by-analysis/{analysisId}")
+    suspend fun getAnalysisNotes(@Path("analysisId") id: Long): Response<List<AnalysisNoteResponse>>
 }

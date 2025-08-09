@@ -31,4 +31,7 @@ class DoctorRemoteDataSource @Inject constructor(
 
     suspend fun getDiagnosisHistory(analysisId: Long) =
         api.getDiagnosisHistory(analysisId)
+
+    suspend fun getAnalysisNotes(analysisId: Long) =
+        api.getAnalysisNotes(analysisId)
 }

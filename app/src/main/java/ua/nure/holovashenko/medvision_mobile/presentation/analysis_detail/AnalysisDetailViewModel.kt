@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.AddNoteRequest
+import ua.nure.holovashenko.medvision_mobile.data.remote.model.AnalysisNoteResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryRequest
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.DiagnosisHistoryResponse
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
@@ -24,6 +25,8 @@ class AnalysisDetailViewModel @Inject constructor(
 
     private val _analysis = MutableStateFlow<ImageAnalysisResponse?>(null)
     val analysis: StateFlow<ImageAnalysisResponse?> = _analysis
+
+    val notes = MutableStateFlow<List<AnalysisNoteResponse>>(emptyList())
 
     val isLoading = MutableStateFlow(false)
     val error = MutableStateFlow<String?>(null)
@@ -54,6 +57,9 @@ class AnalysisDetailViewModel @Inject constructor(
                     diagnosisHistory.value = it
                 }
 
+                doctorRepository.getAnalysisNotes(id).onSuccess {
+                    notes.value = it
+                }
             }.onFailure {
                 error.value = it.message
             }
@@ -88,9 +94,19 @@ class AnalysisDetailViewModel @Inject constructor(
 
     fun addNote(analysisId: Long, doctorId: Long, request: AddNoteRequest) {
         viewModelScope.launch {
-            doctorRepository.addNote(analysisId, doctorId, request).onFailure {
+            doctorRepository.addNote(analysisId, doctorId, request).onSuccess {
+                loadNotes(analysisId)
+            }.onFailure {
                 error.value = it.message
             }
+        }
+    }
+
+    fun loadNotes(analysisId: Long) {
+        viewModelScope.launch {
+            doctorRepository.getAnalysisNotes(analysisId)
+                .onSuccess { notes.value = it }
+                .onFailure { error.value = it.message }
         }
     }
 
