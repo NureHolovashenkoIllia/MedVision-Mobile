@@ -71,7 +71,7 @@ fun DoctorPanelScreen(
                 modifier = Modifier.shadow(4.dp),
                 actions = {
                     IconButton(onClick = onProfileClick) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = "Профіль")
+                        Icon(Icons.Default.AccountCircle, contentDescription = stringResource(R.string.profile))
                     }
                 }
             )
@@ -101,7 +101,7 @@ fun DoctorPanelScreen(
                     CircularProgressIndicator()
                 }
             } else if (errorMessage != null) {
-                Text("Помилка: $errorMessage", color = MaterialTheme.colorScheme.error)
+                Text(stringResource(R.string.error_message, errorMessage ?: ""), color = MaterialTheme.colorScheme.error)
             } else {
                 LazyColumn(
                     modifier = Modifier
@@ -144,11 +144,11 @@ fun SearchAndSortBar(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchChange,
-            placeholder = { Text("Пошук пацієнтів") },
+            placeholder = { Text(stringResource(R.string.search_patients)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Пошук"
+                    contentDescription = stringResource(R.string.search)
                 )
             },
             shape = RoundedCornerShape(12.dp),
@@ -167,7 +167,7 @@ fun SearchAndSortBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.sort_ic),
-                    contentDescription = "Сортувати",
+                    contentDescription = stringResource(R.string.sort),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -193,7 +193,7 @@ fun SearchAndSortBar(
                                 if (option == sortBy) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
-                                        contentDescription = "Обрано",
+                                        contentDescription = stringResource(R.string.chosen),
                                         tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
@@ -237,7 +237,7 @@ fun PatientCard(
                 if (bitmap != null) {
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Avatar",
+                        contentDescription = stringResource(R.string.avatar),
                         modifier = Modifier
                             .size(48.dp)
                             .clip(CircleShape)
@@ -245,7 +245,7 @@ fun PatientCard(
                 } else {
                     Icon(
                         Icons.Default.AccountCircle,
-                        contentDescription = "No avatar",
+                        contentDescription = stringResource(R.string.no_avatar),
                         modifier = Modifier.size(48.dp),
                         tint = MaterialTheme.colorScheme.outline
                     )
@@ -270,13 +270,13 @@ fun PatientCard(
 
             patient.birthDate?.let {
                 Text(
-                    text = "Дата народження: $it",
+                    text = stringResource(R.string.birth_date, it),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
 
             Text(
-                text = "Останній огляд: ${patient.lastExamDate ?: "-"}",
+                text = stringResource(R.string.last_exam_date, patient.lastExamDate ?: "-"),
                 style = MaterialTheme.typography.bodySmall
             )
         }

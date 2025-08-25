@@ -28,4 +28,62 @@
     <string name="invalid_date">Невірний формат дати (РРРР-ММ-ДД)</string>
     <string name="name_required">Ім’я обов’язкове</string>
     <string name="gender_required">Оберіть стать</string>
+
+    <!-- Screens / Navigation -->
+    <string name="patients">Пацієнти</string>
+    <string name="analyses">Дослідження</string>
+    <string name="analysis_details">Деталі дослідження</string>
+    <string name="back">Назад</string>
+
+    <!-- Analysis Info -->
+    <string name="main_info">Основна інформація</string>
+    <string name="date">Дата</string>
+    <string name="diagnosis">Діагноз</string>
+    <string name="recommendations">Рекомендації</string>
+    <string name="additional_info">Додаткова інформація</string>
+    <string name="details">Деталі</string>
+    <string name="accuracy">Точність</string>
+    <string name="recall">Повнота</string>
+    <string name="precision">Precision</string>
+    <string name="more">Докладніше</string>
+    <string name="hide">Сховати</string>
+
+    <!-- Status -->
+    <string name="diagnosis_status">Статус діагнозу</string>
+    <string name="expand">Розгорнути</string>
+    <string name="collapse">Згорнути</string>
+
+    <!-- Notes -->
+    <string name="doctor_notes">Нотатки лікарів</string>
+    <string name="add_note">Додати нотатку</string>
+    <string name="note_text">Текст нотатки</string>
+    <string name="cancel">Скасувати</string>
+    <string name="save">Зберегти</string>
+    <string name="note_number">Нотатка №%1$d</string>
+    <string name="ct_image_with_notes">Зображення КТ з нотатками</string>
+
+    <!-- Diagnosis history -->
+    <string name="diagnosis_history">Історія діагнозів</string>
+    <string name="doctor">Лікар</string>
+    <string name="reason">Причина</string>
+    <string name="update_diagnosis">Оновити діагноз</string>
+    <string name="add_diagnosis">Додати діагноз</string>
+
+    <!-- Loading / Errors -->
+    <string name="loading_data">Завантаження даних…</string>
+    <string name="loading">Завантаження…</string>
+    <string name="account_icon">Іконка акаунту</string>
+    <string name="heatmap">Теплова карта</string>
+
+    <!-- Doctor Panel -->
+    <string name="profile">Профіль</string>
+    <string name="search_patients">Пошук пацієнтів</string>
+    <string name="search">Пошук</string>
+    <string name="sort">Сортувати</string>
+    <string name="chosen">Обрано</string>
+    <string name="avatar">Аватар</string>
+    <string name="no_avatar">Без аватару</string>
+    <string name="birth_date_label">Дата народження: %1$s</string>
+    <string name="last_exam_date">Останній огляд: %1$s</string>
+    <string name="error_message">Помилка: %1$s</string>
 </resources>

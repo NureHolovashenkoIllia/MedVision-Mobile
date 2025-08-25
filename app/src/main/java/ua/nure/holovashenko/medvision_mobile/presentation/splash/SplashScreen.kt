@@ -2,6 +2,8 @@ package ua.nure.holovashenko.medvision_mobile.presentation.splash
 
 import android.util.Log
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringResource
+import ua.nure.holovashenko.medvision_mobile.R
 import ua.nure.holovashenko.medvision_mobile.data.local.AuthPreferences
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
 import ua.nure.holovashenko.medvision_mobile.presentation.common.Loading
@@ -50,5 +52,5 @@ fun SplashScreen(
         }
     }
 
-    Loading(label = "Завантаження...")
+    Loading(label = stringResource(R.string.loading))
 }

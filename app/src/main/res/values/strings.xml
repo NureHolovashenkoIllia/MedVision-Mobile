@@ -28,4 +28,63 @@
     <string name="invalid_date">Invalid date format (YYYY-MM-DD)</string>
     <string name="name_required">Name is required</string>
     <string name="gender_required">Gender is required</string>
+
+    <!-- Screens -->
+    <string name="patients">Patients</string>
+    <string name="analyses">Analyses</string>
+    <string name="analysis_details">Analysis Details</string>
+    <string name="back">Back</string>
+
+    <!-- Analysis Info -->
+    <string name="main_info">Main Information</string>
+    <string name="date">Date</string>
+    <string name="diagnosis">Diagnosis</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="additional_info">Additional Information</string>
+    <string name="details">Details</string>
+    <string name="accuracy">Accuracy</string>
+    <string name="recall">Recall</string>
+    <string name="precision">Precision</string>
+    <string name="more">More</string>
+    <string name="hide">Hide</string>
+
+    <!-- Status -->
+    <string name="diagnosis_status">Diagnosis Status</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
+
+    <!-- Notes -->
+    <string name="doctor_notes">Doctor Notes</string>
+    <string name="add_note">Add Note</string>
+    <string name="note_text">Note Text</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="note_number">Note #%1$d</string>
+    <string name="ct_image_with_notes">CT Image with notes</string>
+
+    <!-- Diagnosis history -->
+    <string name="diagnosis_history">Diagnosis History</string>
+    <string name="doctor">Doctor</string>
+    <string name="reason">Reason</string>
+    <string name="update_diagnosis">Update Diagnosis</string>
+    <string name="add_diagnosis">Add Diagnosis</string>
+
+    <!-- Loading / Errors -->
+    <string name="loading_data">Loading data…</string>
+    <string name="loading">Loading…</string>
+    <string name="account_icon">Account icon</string>
+    <string name="heatmap">Heatmap</string>
+
+
+    <!-- Doctor Panel -->
+    <string name="profile">Profile</string>
+    <string name="search_patients">Search patients</string>
+    <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="chosen">Selected</string>
+    <string name="avatar">Avatar</string>
+    <string name="no_avatar">No avatar</string>
+    <string name="birth_date_label">Birth date: %1$s</string>
+    <string name="last_exam_date">Last exam: %1$s</string>
+    <string name="error_message">Error: %1$s</string>
 </resources>

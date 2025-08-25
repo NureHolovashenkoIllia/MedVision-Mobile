@@ -123,7 +123,7 @@ fun AnalysisDetailScreen(
                 modifier = Modifier.shadow(4.dp),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -139,10 +139,10 @@ fun AnalysisDetailScreen(
                     item {
                         BreadcrumbNavigation(
                             path = listOf(
-                                "Пацієнти" to { onBackClick(); onBackClick() },
-                                "Дослідження" to onBackClick
+                                stringResource(R.string.patients) to { onBackClick(); onBackClick() },
+                                stringResource(R.string.analyses) to onBackClick
                             ),
-                            current = "Деталі дослідження"
+                            current = stringResource(R.string.analysis_details)
                         )
                         Spacer(Modifier.height(16.dp))
 
@@ -166,7 +166,7 @@ fun AnalysisDetailScreen(
                     if (imageBytes != null) {
                         item {
                             Text(
-                                "Нотатки лікарів",
+                                stringResource(R.string.doctor_notes),
                                 style = MaterialTheme.typography.headlineSmall
                             )
 
@@ -211,7 +211,7 @@ fun AnalysisDetailScreen(
                     }
 
                     item {
-                        Text("Історія діагнозів", style = MaterialTheme.typography.headlineSmall)
+                        Text(stringResource(R.string.diagnosis_history), style = MaterialTheme.typography.headlineSmall)
                         Spacer(Modifier.height(8.dp))
                     }
 
@@ -231,7 +231,7 @@ fun AnalysisDetailScreen(
             }
 
             if (isLoading) {
-                Loading("Завантаження даних...")
+                Loading(stringResource(R.string.loading_data))
             }
         }
     }
@@ -246,7 +246,7 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?) 
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text("Основна інформація", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.main_info), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
 
             Row {
@@ -258,41 +258,41 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?) 
                     val bitmap = BitmapFactory.decodeByteArray(heatmapBytes, 0, heatmapBytes.size)
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Теплова карта",
+                        contentDescription = stringResource(R.string.heatmap),
                         modifier = avatarModifier
                     )
                 } else {
                     Icon(
                         painter = painterResource(R.drawable.image_ic),
-                        contentDescription = "Іконка акаунту",
+                        contentDescription = stringResource(R.string.account_icon),
                         tint = MaterialTheme.colorScheme.outline,
                         modifier = avatarModifier
                     )
                 }
 
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Дата", analysis.creationDatetime.toString())
-                    InfoRow("Діагноз", analysis.analysisDiagnosis ?: "-")
+                    InfoRow(stringResource(R.string.date), analysis.creationDatetime.toString())
+                    InfoRow(stringResource(R.string.diagnosis), analysis.analysisDiagnosis ?: "-")
                 }
             }
 
-            InfoRow("Рекомендації", analysis.treatmentRecommendations ?: "-")
+            InfoRow(stringResource(R.string.recommendations), analysis.treatmentRecommendations ?: "-")
 
             if (showMedicalInfo) {
                 Spacer(Modifier.height(8.dp))
-                Text("Додаткова інформація", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.additional_info), style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.height(8.dp))
 
-                InfoRow("Деталі", analysis.analysisDetails ?: "-")
-                InfoRow("Точність", analysis.analysisAccuracy?.toString() ?: "-")
-                InfoRow("Повнота", analysis.analysisRecall?.toString() ?: "-")
-                InfoRow("Precision", analysis.analysisPrecision?.toString() ?: "-")
+                InfoRow(stringResource(R.string.details), analysis.analysisDetails ?: "-")
+                InfoRow(stringResource(R.string.accuracy), analysis.analysisAccuracy?.toString() ?: "-")
+                InfoRow(stringResource(R.string.recall), analysis.analysisRecall?.toString() ?: "-")
+                InfoRow(stringResource(R.string.precision), analysis.analysisPrecision?.toString() ?: "-")
             }
 
             Spacer(Modifier.height(12.dp))
 
             Text(
-                text = if (showMedicalInfo) "Сховати" else "Докладніше",
+                text = if (showMedicalInfo) stringResource(R.string.hide) else stringResource(R.string.more),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.primary
                 ),
@@ -314,7 +314,7 @@ fun StatusSelector(
 
     Column {
         Text(
-            text = "Статус діагнозу",
+            text = stringResource(R.string.diagnosis_status),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -339,7 +339,7 @@ fun StatusSelector(
                 )
                 Icon(
                     imageVector = if (expanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = if (expanded) "Згорнути" else "Розгорнути"
+                    contentDescription = if (expanded) stringResource(R.string.collapse) else stringResource(R.string.expand)
                 )
             }
         }
@@ -384,8 +384,8 @@ private fun DiagnosisHistoryCard(item: DiagnosisHistoryResponse) {
         Column(Modifier.padding(16.dp)) {
             Row {
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Лікар", item.doctorName.toString())
-                    InfoRow("Діагноз", item.diagnosisText)
+                    InfoRow(stringResource(R.string.doctor), item.doctorName.toString())
+                    InfoRow(stringResource(R.string.diagnosis), item.diagnosisText)
                 }
 
                 Text(
@@ -398,22 +398,22 @@ private fun DiagnosisHistoryCard(item: DiagnosisHistoryResponse) {
 
                 if (showAdditionalInfo) {
                     item.reason.takeIf { it.isNotBlank() }?.let {
-                        InfoRow("Причина", it)
+                        InfoRow(stringResource(R.string.reason), it)
                     }
 
                     item.analysisDetails.takeIf { !it.isNullOrBlank() }?.let {
-                        InfoRow("Деталі", it)
+                        InfoRow(stringResource(R.string.details), it)
                     }
 
                     item.treatmentRecommendations.takeIf { !it.isNullOrBlank() }?.let {
-                        InfoRow("Рекомендації", it)
+                        InfoRow(stringResource(R.string.recommendations), it)
                     }
                 }
 
                 Spacer(Modifier.height(12.dp))
 
                 Text(
-                    text = if (showAdditionalInfo) "Сховати" else "Докладніше",
+                    text = if (showAdditionalInfo) stringResource(R.string.hide) else stringResource(R.string.more),
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = MaterialTheme.colorScheme.primary
                     ),
@@ -474,7 +474,7 @@ fun NotesImage(
     ) {
         Image(
             bitmap = imageBitmap,
-            contentDescription = "CT Image with notes",
+            contentDescription = stringResource(R.string.ct_image_with_notes),
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
         )
@@ -570,12 +570,12 @@ private fun AddNoteDialog(
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                Text("Додати нотатку", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.add_note), style = MaterialTheme.typography.titleLarge)
 
                 OutlinedTextField(
                     value = noteText,
                     onValueChange = onNoteTextChange,
-                    label = { Text("Текст нотатки") },
+                    label = { Text(stringResource(R.string.note_text)) },
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -584,11 +584,11 @@ private fun AddNoteDialog(
                     horizontalArrangement = Arrangement.End
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text("Скасувати")
+                        Text(stringResource(R.string.cancel))
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(onClick = onSave) {
-                        Text("Зберегти")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }
@@ -602,7 +602,7 @@ fun NoteCard(note: AnalysisNoteResponse) {
         Row {
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "Нотатка #${note.analysisNoteId}",
+                    stringResource(R.string.note_number, note.analysisNoteId),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -643,7 +643,7 @@ fun ToggleableUpdateDiagnosisSection(
             onClick = { showDialog = true },
             modifier = Modifier.align(Alignment.End)
         ) {
-            Text("Додати діагноз")
+            Text(stringResource(R.string.add_diagnosis))
         }
     }
 
@@ -663,35 +663,35 @@ fun ToggleableUpdateDiagnosisSection(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Оновити діагноз",
+                        text = stringResource(R.string.update_diagnosis),
                         style = MaterialTheme.typography.titleLarge
                     )
 
                     OutlinedTextField(
                         value = diagnosisText,
                         onValueChange = { diagnosisText = it },
-                        label = { Text("Діагноз") },
+                        label = { Text(stringResource(R.string.diagnosis)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     OutlinedTextField(
                         value = reason,
                         onValueChange = { reason = it },
-                        label = { Text("Причина") },
+                        label = { Text(stringResource(R.string.reason)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     OutlinedTextField(
                         value = details,
                         onValueChange = { details = it },
-                        label = { Text("Деталі") },
+                        label = { Text(stringResource(R.string.details)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
                     OutlinedTextField(
                         value = recommendations,
                         onValueChange = { recommendations = it },
-                        label = { Text("Рекомендації") },
+                        label = { Text(stringResource(R.string.recommendations)) },
                         modifier = Modifier.fillMaxWidth()
                     )
 
@@ -700,7 +700,7 @@ fun ToggleableUpdateDiagnosisSection(
                         horizontalArrangement = Arrangement.End
                     ) {
                         TextButton(onClick = { showDialog = false }) {
-                            Text("Скасувати")
+                            Text(stringResource(R.string.cancel))
                         }
 
                         Spacer(modifier = Modifier.width(8.dp))
@@ -726,7 +726,7 @@ fun ToggleableUpdateDiagnosisSection(
                                 }
                             }
                         ) {
-                            Text("Зберегти")
+                            Text(stringResource(R.string.save))
                         }
                     }
                 }
