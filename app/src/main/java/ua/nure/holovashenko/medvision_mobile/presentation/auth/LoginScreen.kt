@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -63,7 +64,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Welcome Back",
+            text = stringResource(R.string.welcome_back),
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(bottom = 32.dp)
         )
@@ -74,7 +75,7 @@ fun LoginScreen(
                 viewModel.email.value = it
                 emailChanged = true
             },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email)) },
             isError = emailTouched && emailError != null,
             leadingIcon = {
                 Icon(
@@ -112,7 +113,7 @@ fun LoginScreen(
                 viewModel.password.value = it
                 passwordChanged = true
             },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             isError = passwordTouched && passwordError != null,
             leadingIcon = {
                 Icon(
@@ -139,7 +140,7 @@ fun LoginScreen(
                 IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
                     Icon(
                         painter = painterResource(id = if (passwordVisible) R.drawable.visible else R.drawable.invisible),
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                        contentDescription = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(R.string.show_password),
                         modifier = Modifier.padding(end = 16.dp)
                     )
                 }
@@ -177,13 +178,13 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text("Login")
+            Text(stringResource(R.string.login))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = onRegisterClick) {
-            Text("Don’t have an account? Register")
+            Text(stringResource(R.string.dont_have_account))
         }
 
         if (authState is AuthResult.Error) {

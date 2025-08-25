@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MedVision</string>
+
+    <!-- Auth -->
+    <string name="create_account">Створити акаунт</string>
+    <string name="name">Ім’я</string>
+    <string name="email">Ел. пошта</string>
+    <string name="password">Пароль</string>
+    <string name="birth_date">Дата народження</string>
+    <string name="register">Зареєструватися</string>
+    <string name="already_have_account">Вже маєте акаунт? Увійти</string>
+    <string name="welcome_back">З поверненням</string>
+    <string name="login">Увійти</string>
+    <string name="dont_have_account">Не маєте акаунту? Зареєструватися</string>
+    <string name="male">Чоловік</string>
+    <string name="female">Жінка</string>
+    <string name="other">Інше</string>
+    <string name="select_date">Вибрати дату</string>
+    <string name="hide_password">Приховати пароль</string>
+    <string name="show_password">Показати пароль</string>
+
+    <!-- Validation -->
+    <string name="email_required">Ел. пошта обов’язкова</string>
+    <string name="invalid_email">Невірний формат ел. пошти</string>
+    <string name="password_required">Пароль обов’язковий</string>
+    <string name="password_too_short">Пароль має містити щонайменше 6 символів</string>
+    <string name="invalid_date">Невірний формат дати (РРРР-ММ-ДД)</string>
+    <string name="name_required">Ім’я обов’язкове</string>
+    <string name="gender_required">Оберіть стать</string>
 </resources>

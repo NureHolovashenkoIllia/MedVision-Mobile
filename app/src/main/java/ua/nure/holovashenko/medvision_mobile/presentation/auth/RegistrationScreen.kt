@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -105,7 +106,7 @@ fun RegistrationScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Create Account", style = MaterialTheme.typography.headlineLarge)
+        Text(stringResource(R.string.create_account), style = MaterialTheme.typography.headlineLarge)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -131,7 +132,7 @@ fun RegistrationScreen(
                 viewModel.name.value = it
                 nameChanged = true
             },
-            label = { Text("Name") },
+            label = { Text(stringResource(R.string.name)) },
             isError = nameTouched && nameError != null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -153,7 +154,7 @@ fun RegistrationScreen(
                 viewModel.email.value = it
                 emailChanged = true
             },
-            label = { Text("Email") },
+            label = { Text(stringResource(R.string.email)) },
             isError = emailTouched && emailError != null,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
             modifier = Modifier
@@ -176,12 +177,12 @@ fun RegistrationScreen(
                 viewModel.password.value = it
                 passwordChanged = true
             },
-            label = { Text("Password") },
+            label = { Text(stringResource(R.string.password)) },
             trailingIcon = {
                 IconButton(onClick = { viewModel.togglePasswordVisibility() }) {
                     Icon(
                         painter = painterResource(id = if (passwordVisible) R.drawable.visible else R.drawable.invisible),
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                        contentDescription = if (passwordVisible) stringResource(R.string.hide_password) else stringResource(R.string.show_password),
                         modifier = Modifier.padding(end = 16.dp)
                     )
                 }
@@ -216,13 +217,13 @@ fun RegistrationScreen(
                 IconButton(onClick = { showDatePicker = true }) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = "Select date",
+                        contentDescription = stringResource(R.string.select_date),
                         modifier = Modifier.padding(end = 16.dp)
                     )
                 }
             },
             isError = birthDateTouched && birthDateError != null,
-            label = { Text("Birth Date") }
+            label = { Text(stringResource(R.string.birth_date)) }
         )
         if (birthDateTouched && birthDateError != null) {
             Text(birthDateError!!, color = MaterialTheme.colorScheme.error)
@@ -259,13 +260,13 @@ fun RegistrationScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
-            Text("Register")
+            Text(stringResource(R.string.register))
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         TextButton(onClick = onLoginClick) {
-            Text("Already have an account? Login")
+            Text(stringResource(R.string.already_have_account))
         }
 
         if (authState is AuthResult.Error) {
@@ -299,9 +300,9 @@ fun GenderSegmentedButtonRow(
                 label = {
                     Text(
                         when (gender) {
-                            Gender.MALE -> "Male"
-                            Gender.FEMALE -> "Female"
-                            Gender.OTHER -> "Other"
+                            Gender.MALE -> stringResource(R.string.male)
+                            Gender.FEMALE -> stringResource(R.string.female)
+                            Gender.OTHER -> stringResource(R.string.other)
                         }
                     )
                 },
