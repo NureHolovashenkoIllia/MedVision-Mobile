@@ -82,7 +82,7 @@ fun UploadAnalysisScreen(
                 ),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 modifier = Modifier.shadow(4.dp)
@@ -97,15 +97,15 @@ fun UploadAnalysisScreen(
             ) {
                 BreadcrumbNavigation(
                     path = listOf(
-                        "Пацієнти" to { onBackClick(); onBackClick() },
-                        "Дослідження" to onBackClick
+                        stringResource(R.string.patients) to { onBackClick(); onBackClick() },
+                        stringResource(R.string.analyses) to onBackClick
                     ),
-                    current = "Нове дослідження"
+                    current = stringResource(R.string.new_analysis)
                 )
 
                 Spacer(Modifier.height(24.dp))
 
-                Text("КТ-знімок пацієнта", style = MaterialTheme.typography.titleLarge)
+                Text(stringResource(R.string.ct_image_patient), style = MaterialTheme.typography.titleLarge)
 
                 Spacer(Modifier.height(16.dp))
 
@@ -129,7 +129,7 @@ fun UploadAnalysisScreen(
                         bitmap?.let {
                             Image(
                                 bitmap = it,
-                                contentDescription = "Вибране зображення",
+                                contentDescription = stringResource(R.string.selected_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
@@ -138,13 +138,13 @@ fun UploadAnalysisScreen(
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(
                                 painter = painterResource(R.drawable.upload_image_ic),
-                                contentDescription = "Завантажити зображення",
+                                contentDescription = stringResource(R.string.upload_image),
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.height(48.dp)
                             )
                             Spacer(Modifier.height(8.dp))
                             Text(
-                                "Натисніть, щоб обрати зображення",
+                                stringResource(R.string.tap_to_select_image),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -154,6 +154,7 @@ fun UploadAnalysisScreen(
 
                 Spacer(Modifier.height(32.dp))
 
+                val errorText: String = stringResource(R.string.cannot_read_file)
                 Button(
                     onClick = {
                         imageUri?.let { uri ->
@@ -162,19 +163,19 @@ fun UploadAnalysisScreen(
                             if (imageBytes != null) {
                                 viewModel.uploadAnalysis(imageBytes, patientId, doctorId, onAnalysisUploaded)
                             } else {
-                                Toast.makeText(context, "Неможливо прочитати файл", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, errorText, Toast.LENGTH_SHORT).show()
                             }
                         }
                     },
                     enabled = imageUri != null,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Завантажити та провести дослідження")
+                    Text(stringResource(R.string.upload_and_analyze))
                 }
             }
 
             if (isLoading) {
-                Loading("Опрацювання зображення…")
+                Loading(stringResource(R.string.processing_image))
             }
         }
     }

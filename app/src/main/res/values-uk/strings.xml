@@ -33,6 +33,7 @@
     <string name="patients">Пацієнти</string>
     <string name="analyses">Дослідження</string>
     <string name="analysis_details">Деталі дослідження</string>
+    <string name="new_analysis">Нове дослідження</string>
     <string name="back">Назад</string>
 
     <!-- Analysis Info -->
@@ -86,4 +87,34 @@
     <string name="birth_date_label">Дата народження: %1$s</string>
     <string name="last_exam_date">Останній огляд: %1$s</string>
     <string name="error_message">Помилка: %1$s</string>
+
+    <!-- Upload Analysis -->
+    <string name="ct_image_patient">КТ-знімок пацієнта</string>
+    <string name="selected_image">Вибране зображення</string>
+    <string name="upload_image">Завантажити зображення</string>
+    <string name="tap_to_select_image">Натисніть, щоб обрати зображення</string>
+    <string name="cannot_read_file">Неможливо прочитати файл</string>
+    <string name="upload_and_analyze">Завантажити та провести дослідження</string>
+    <string name="processing_image">Опрацювання зображення…</string>
+
+    <!-- Sort options -->
+    <string name="sort_name">Ім’я</string>
+    <string name="sort_age">Вік</string>
+    <string name="sort_last_exam">Останній огляд</string>
+
+    <!-- Analysis filter options -->
+    <string name="filter_all">Усі</string>
+    <string name="filter_viewed">Переглянуті</string>
+    <string name="filter_unviewed">Непереглянуті</string>
+
+    <!-- Analysis sort options -->
+    <string name="sort_date_desc">Дата ↓</string>
+    <string name="sort_date_asc">Дата ↑</string>
+    <string name="sort_accuracy">Точність</string>
+
+    <!-- Analysis status -->
+    <string name="status_pending">Очікує</string>
+    <string name="status_reviewed">Переглянуто</string>
+    <string name="status_requires_revision">Потребує доопрацювання</string>
+
 </resources>

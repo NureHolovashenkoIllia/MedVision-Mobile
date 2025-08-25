@@ -87,4 +87,35 @@
     <string name="birth_date_label">Birth date: %1$s</string>
     <string name="last_exam_date">Last exam: %1$s</string>
     <string name="error_message">Error: %1$s</string>
+
+    <!-- Upload Analysis -->
+    <string name="new_analysis">New Analysis</string>
+    <string name="ct_image_patient">Patient CT Image</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="tap_to_select_image">Tap to select an image</string>
+    <string name="cannot_read_file">Unable to read file</string>
+    <string name="upload_and_analyze">Upload and Analyze</string>
+    <string name="processing_image">Processing image…</string>
+
+    <!-- Sort options -->
+    <string name="sort_name">Name</string>
+    <string name="sort_age">Age</string>
+    <string name="sort_last_exam">Last Exam</string>
+
+    <!-- Analysis filter options -->
+    <string name="filter_all">All</string>
+    <string name="filter_viewed">Viewed</string>
+    <string name="filter_unviewed">Unviewed</string>
+
+    <!-- Analysis sort options -->
+    <string name="sort_date_desc">Date ↓</string>
+    <string name="sort_date_asc">Date ↑</string>
+    <string name="sort_accuracy">Accuracy</string>
+
+    <!-- Analysis status -->
+    <string name="status_pending">Pending</string>
+    <string name="status_reviewed">Reviewed</string>
+    <string name="status_requires_revision">Requires Revision</string>
+
 </resources>

@@ -333,7 +333,7 @@ fun StatusSelector(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = currentStatus.name,
+                    text = stringResource(currentStatus.labelRes),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -354,7 +354,7 @@ fun StatusSelector(
                 DropdownMenuItem(
                     text = {
                         Text(
-                            text = status.name,
+                            text = stringResource(status.labelRes),
                             color = MaterialTheme.colorScheme.primary,
                             fontWeight = if (status == currentStatus) FontWeight.Bold else FontWeight.Normal
                         )

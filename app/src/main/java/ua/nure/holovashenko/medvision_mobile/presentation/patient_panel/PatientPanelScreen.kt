@@ -248,7 +248,7 @@ fun SearchAndSortBar(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = option.displayName,
+                                    text = stringResource(option.labelRes),
                                     color = if (option == sortOption) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                                     fontWeight = if (option == sortOption) FontWeight.Bold else FontWeight.Normal
                                 )
@@ -292,7 +292,7 @@ fun SearchAndSortBar(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 Text(
-                                    text = option.displayName,
+                                    text = stringResource(option.labelRes),
                                     color = if (option == filterOption) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
                                     fontWeight = if (option == filterOption) FontWeight.Bold else FontWeight.Normal
                                 )
