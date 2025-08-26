@@ -86,6 +86,12 @@
     <string name="error_loading_analyses">Unknown error while loading analyses</string>
     <string name="error_loading_heatmaps">Failed to load heatmaps: %1$s</string>
 
+    <!-- Patient Analysis Detail -->
+    <string name="no_heatmap">No heatmap</string>
+    <string name="no_image">No image</string>
+    <string name="download">Download</string>
+    <string name="ct_image">CT Image</string>
+
     <!-- Doctor Panel -->
     <string name="profile">Profile</string>
     <string name="search_patients">Search patients</string>
@@ -97,6 +103,42 @@
     <string name="birth_date_label">Birth date: %1$s</string>
     <string name="last_exam_date">Last exam: %1$s</string>
     <string name="error_message">Error: %1$s</string>
+
+    <!-- Patient Detail -->
+    <string name="add_analysis">Add Analysis</string>
+    <string name="previous_page">Previous page</string>
+    <string name="next_page">Next page</string>
+    <string name="general_info">General Information</string>
+    <string name="patient_avatar">Patient avatar</string>
+    <string name="unknown">Unknown</string>
+    <string name="last_exam">Last exam</string>
+    <string name="medical_info">Medical Information</string>
+    <string name="none">None</string>
+    <string name="no_allergies">None</string>
+    <string name="no_address">Unknown</string>
+
+    <!-- Empty state -->
+    <string name="no_analyses_icon">No analyses</string>
+    <string name="no_analyses_title">No analyses added yet</string>
+    <string name="no_analyses_message">Press the \'+\' button in the top menu to add the first analysis.</string>
+    <string name="add_first_analysis">Add first analysis</string>
+    <string name="add_analysis_btn">Add analysis</string>
+
+    <!-- Bottom actions -->
+    <string name="compare">Compare</string>
+
+    <!-- Comparison dialog -->
+    <string name="close">Close</string>
+    <string name="comparison_title">Analyses Comparison</string>
+    <string name="date1">Date 1</string>
+    <string name="date2">Date 2</string>
+    <string name="ct_image1">CT Image 1</string>
+    <string name="ct_image2">CT Image 2</string>
+    <string name="difference">Difference</string>
+
+    <!-- File save -->
+    <string name="file_saved">File saved: %1$s</string>
+    <string name="file_save_error">PDF save error: %1$s</string>
 
     <!-- Upload Analysis -->
     <string name="new_analysis">New Analysis</string>

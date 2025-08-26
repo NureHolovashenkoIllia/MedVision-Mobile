@@ -45,7 +45,7 @@
     <string name="details">Деталі</string>
     <string name="accuracy">Точність</string>
     <string name="recall">Повнота</string>
-    <string name="precision">Precision</string>
+    <string name="precision">Прецизійність</string>
     <string name="more">Докладніше</string>
     <string name="hide">Сховати</string>
 
@@ -87,6 +87,12 @@
     <string name="error_loading_analyses">Невідома помилка при завантаженні аналізів</string>
     <string name="error_loading_heatmaps">Не вдалося завантажити теплові карти: %1$s</string>
 
+    <!-- Patient Analysis Detail -->
+    <string name="no_heatmap">Немає теплової карти</string>
+    <string name="no_image">Немає зображення</string>
+    <string name="download">Завантажити</string>
+    <string name="ct_image">КТ-знімок</string>
+
     <!-- Doctor Panel -->
     <string name="profile">Профіль</string>
     <string name="search_patients">Пошук пацієнтів</string>
@@ -98,6 +104,42 @@
     <string name="birth_date_label">Дата народження: %1$s</string>
     <string name="last_exam_date">Останній огляд: %1$s</string>
     <string name="error_message">Помилка: %1$s</string>
+
+    <!-- Patient Detail -->
+    <string name="add_analysis">Додати дослідження</string>
+    <string name="previous_page">Попередня сторінка</string>
+    <string name="next_page">Наступна сторінка</string>
+    <string name="general_info">Загальна інформація</string>
+    <string name="patient_avatar">Аватар пацієнта</string>
+    <string name="unknown">Невідомо</string>
+    <string name="last_exam">Останній огляд</string>
+    <string name="medical_info">Медична інформація</string>
+    <string name="none">Відсутні</string>
+    <string name="no_allergies">Немає</string>
+    <string name="no_address">Невідома</string>
+
+    <!-- Empty state -->
+    <string name="no_analyses_icon">Немає аналізів</string>
+    <string name="no_analyses_title">Дослідження ще не додано</string>
+    <string name="no_analyses_message">Натисніть кнопку \'+\' у верхньому меню, щоб додати перше дослідження.</string>
+    <string name="add_first_analysis">Додати перше дослідження</string>
+    <string name="add_analysis_btn">Додати дослідження</string>
+
+    <!-- Bottom actions -->
+    <string name="compare">Порівняти</string>
+
+    <!-- Comparison dialog -->
+    <string name="close">Закрити</string>
+    <string name="comparison_title">Порівняння досліджень</string>
+    <string name="date1">Дата 1</string>
+    <string name="date2">Дата 2</string>
+    <string name="ct_image1">КТ знімок 1</string>
+    <string name="ct_image2">КТ знімок 2</string>
+    <string name="difference">Різниця</string>
+
+    <!-- File save -->
+    <string name="file_saved">Файл збережено: %1$s</string>
+    <string name="file_save_error">Помилка збереження PDF: %1$s</string>
 
     <!-- Upload Analysis -->
     <string name="ct_image_patient">КТ-знімок пацієнта</string>

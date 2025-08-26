@@ -82,7 +82,7 @@ fun PatientAnalysisDetailScreen(
                 ),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 modifier = Modifier.shadow(4.dp)
@@ -106,7 +106,7 @@ fun PatientAnalysisDetailScreen(
             }
 
             if (loading) {
-                Loading("Завантаження даних...")
+                Loading(stringResource(R.string.loading_data))
             }
 
             analysis?.let {
@@ -138,7 +138,7 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?, 
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text("Основна інформація", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.main_info), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
 
             Row {
@@ -150,30 +150,30 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?, 
                     val bitmap = BitmapFactory.decodeByteArray(heatmapBytes, 0, heatmapBytes.size)
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Теплова карта",
+                        contentDescription = stringResource(R.string.heatmap),
                         modifier = avatarModifier
                     )
                 } else {
                     Icon(
                         painter = painterResource(R.drawable.image_ic),
-                        contentDescription = "No heatmap",
+                        contentDescription = stringResource(R.string.no_heatmap),
                         tint = MaterialTheme.colorScheme.outline,
                         modifier = avatarModifier
                     )
                 }
 
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Дата", formatDateTime(analysis.creationDatetime.toString()))
-                    InfoRow("Діагноз", analysis.analysisDiagnosis ?: "-")
+                    InfoRow(stringResource(R.string.date), formatDateTime(analysis.creationDatetime.toString()))
+                    InfoRow(stringResource(R.string.diagnosis), analysis.analysisDiagnosis ?: "-")
                 }
             }
 
-            InfoRow("Рекомендації", analysis.treatmentRecommendations ?: "-")
+            InfoRow(stringResource(R.string.recommendations), analysis.treatmentRecommendations ?: "-")
 
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = "КТ-знімок",
+                text = stringResource(R.string.ct_image),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.outline
             )
@@ -181,7 +181,7 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?, 
                 val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
                 Image(
                     bitmap = bitmap.asImageBitmap(),
-                    contentDescription = "КТ-знімок",
+                    contentDescription = stringResource(R.string.ct_image),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(200.dp)
@@ -190,7 +190,7 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?, 
             } else {
                 Icon(
                     painter = painterResource(R.drawable.image_ic),
-                    contentDescription = "No image",
+                    contentDescription = stringResource(R.string.no_image),
                     tint = MaterialTheme.colorScheme.outline,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -203,19 +203,19 @@ fun AnalysisInfoCard(analysis: ImageAnalysisResponse, heatmapBytes: ByteArray?, 
 
             if (showMedicalInfo) {
                 Spacer(Modifier.height(8.dp))
-                Text("Додаткова інформація", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.additional_info), style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.height(8.dp))
 
-                InfoRow("Деталі", analysis.analysisDetails ?: "-")
-                InfoRow("Точність", analysis.analysisAccuracy?.toString() ?: "-")
-                InfoRow("Повнота", analysis.analysisRecall?.toString() ?: "-")
-                InfoRow("Precision", analysis.analysisPrecision?.toString() ?: "-")
+                InfoRow(stringResource(R.string.details), analysis.analysisDetails ?: "-")
+                InfoRow(stringResource(R.string.accuracy), analysis.analysisAccuracy?.toString() ?: "-")
+                InfoRow(stringResource(R.string.recall), analysis.analysisRecall?.toString() ?: "-")
+                InfoRow(stringResource(R.string.precision), analysis.analysisPrecision?.toString() ?: "-")
             }
 
             Spacer(Modifier.height(12.dp))
 
             Text(
-                text = if (showMedicalInfo) "Сховати" else "Докладніше",
+                text = if (showMedicalInfo) stringResource(R.string.hide) else stringResource(R.string.more),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.primary
                 ),
@@ -243,7 +243,7 @@ fun BottomActionBar(
             horizontalAlignment = Alignment.End
         ) {
             ActionButton(
-                text = "Завантажити",
+                text = stringResource(R.string.download),
                 painter = painterResource(id = R.drawable.download_ic),
                 onClick = onDownloadClick,
                 backgroundColor = MaterialTheme.colorScheme.secondaryContainer,

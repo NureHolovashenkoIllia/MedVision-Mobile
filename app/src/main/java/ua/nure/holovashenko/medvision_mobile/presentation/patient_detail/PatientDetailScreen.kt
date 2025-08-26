@@ -111,9 +111,10 @@ fun PatientDetailScreen(
         viewModel.loadData(patientId)
     }
 
+    var errorText = stringResource(R.string.error_message, error ?: "")
     LaunchedEffect(error) {
         if (error != null) {
-            Toast.makeText(context, "Помилка: $error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, errorText, Toast.LENGTH_SHORT).show()
             delay(3000)
             viewModel.clearError()
         }
@@ -139,12 +140,12 @@ fun PatientDetailScreen(
                 modifier = Modifier.shadow(4.dp),
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 actions = {
                     IconButton(onClick = { onAddAnalysisClick(patientId) }) {
-                        Icon(Icons.Default.Add, contentDescription = "Додати аналіз")
+                        Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_analysis))
                     }
                 }
             )
@@ -163,13 +164,13 @@ fun PatientDetailScreen(
                 ) {
                     item {
                         BreadcrumbNavigation(
-                            path = listOf("Пацієнти" to onBackClick),
-                            current = "Дослідження"
+                            path = listOf(stringResource(R.string.patients) to onBackClick),
+                            current = stringResource(R.string.analyses)
                         )
                         Spacer(Modifier.height(16.dp))
                         PatientInfoCard(patient = patient!!, avatar = avatar)
                         Spacer(Modifier.height(16.dp))
-                        Text("Дослідження", style = MaterialTheme.typography.titleLarge)
+                        Text(stringResource(R.string.analyses), style = MaterialTheme.typography.titleLarge)
                         Spacer(Modifier.height(8.dp))
                     }
 
@@ -212,7 +213,7 @@ fun PatientDetailScreen(
                                     ) {
                                         Icon(
                                             Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                                            contentDescription = "Попередня сторінка"
+                                            contentDescription = stringResource(R.string.previous_page)
                                         )
                                     }
 
@@ -242,7 +243,7 @@ fun PatientDetailScreen(
                                     ) {
                                         Icon(
                                             Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                            contentDescription = "Наступна сторінка"
+                                            contentDescription = stringResource(R.string.next_page)
                                         )
                                     }
                                 }
@@ -253,7 +254,7 @@ fun PatientDetailScreen(
             }
 
             if (isLoading) {
-                Loading("Завантаження даних...")
+                Loading(stringResource(R.string.loading_data))
             }
 
             BottomActionBar(
@@ -281,7 +282,7 @@ fun PatientInfoCard(patient: PatientResponse, avatar: ByteArray?) {
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(Modifier.padding(16.dp)) {
-            Text("Загальна інформація", style = MaterialTheme.typography.titleMedium)
+            Text(stringResource(R.string.general_info), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(8.dp))
 
             Row {
@@ -293,44 +294,44 @@ fun PatientInfoCard(patient: PatientResponse, avatar: ByteArray?) {
                     val bitmap = BitmapFactory.decodeByteArray(avatar, 0, avatar.size)
                     Image(
                         bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Аватар пацієнта",
+                        contentDescription = stringResource(R.string.patient_avatar),
                         modifier = avatarModifier
                     )
                 } else {
                     Icon(
                         painter = painterResource(R.drawable.account_ic),
-                        contentDescription = "Іконка акаунту",
+                        contentDescription = stringResource(R.string.account_icon),
                         tint = MaterialTheme.colorScheme.outline,
                         modifier = avatarModifier
                     )
                 }
 
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Ім'я", patient.user.userName)
-                    InfoRow("Email", patient.user.email)
-                    InfoRow("Дата народження", patient.birthDate ?: "Невідомо")
+                    InfoRow(stringResource(R.string.name), patient.user.userName)
+                    InfoRow(stringResource(R.string.email), patient.user.email)
+                    InfoRow(stringResource(R.string.birth_date), patient.birthDate ?: stringResource(R.string.unknown))
                 }
             }
 
-            InfoRow("Стать", patient.gender ?: "Невідомо")
-            InfoRow("Останній огляд", patient.lastExamDate ?: "Ще не було")
+            InfoRow(stringResource(R.string.gender), patient.gender ?: stringResource(R.string.unknown))
+            InfoRow(stringResource(R.string.last_exam), patient.lastExamDate ?: stringResource(R.string.unknown))
 
             if (showMedicalInfo) {
                 Spacer(Modifier.height(8.dp))
-                Text("Медична інформація", style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.medical_info), style = MaterialTheme.typography.titleMedium)
                 Spacer(Modifier.height(8.dp))
 
-                InfoRow("Зріст (см)", patient.heightCm?.toPlainString() ?: "Невідомо")
-                InfoRow("Вага (кг)", patient.weightKg?.toPlainString() ?: "Невідомо")
-                InfoRow("Хронічні хвороби", patient.chronicDiseases ?: "Відсутні")
-                InfoRow("Алергії", patient.allergies ?: "Немає")
-                InfoRow("Адреса", patient.address ?: "Невідома")
+                InfoRow(stringResource(R.string.height), patient.heightCm?.toPlainString() ?: stringResource(R.string.unknown))
+                InfoRow(stringResource(R.string.weight), patient.weightKg?.toPlainString() ?: stringResource(R.string.unknown))
+                InfoRow(stringResource(R.string.chronic_diseases), patient.chronicDiseases ?: stringResource(R.string.none))
+                InfoRow(stringResource(R.string.allergies), patient.allergies ?: stringResource(R.string.no_allergies))
+                InfoRow(stringResource(R.string.address), patient.address ?: stringResource(R.string.no_address))
             }
 
             Spacer(Modifier.height(12.dp))
 
             Text(
-                text = if (showMedicalInfo) "Сховати" else "Докладніше",
+                text = if (showMedicalInfo) stringResource(R.string.hide) else stringResource(R.string.more),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.primary
                 ),
@@ -353,27 +354,27 @@ private fun EmptyAnalysesState(onAddAnalysisClick: () -> Unit) {
     ) {
         Icon(
             painter = painterResource(R.drawable.medvision_ic),
-            contentDescription = "Немає аналізів",
+            contentDescription = stringResource(R.string.no_analyses_icon),
             modifier = Modifier.size(80.dp)
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "Дослідження ще не додано",
+            text = stringResource(R.string.no_analyses_title),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Натисніть кнопку '+' у верхньому меню, щоб додати перше дослідження.",
+            text = stringResource(R.string.no_analyses_message),
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(24.dp))
         Button(onClick = onAddAnalysisClick) {
-            Icon(Icons.Default.Add, contentDescription = "Додати дослідження")
+            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_analysis_btn))
             Spacer(Modifier.width(8.dp))
-            Text("Додати перше дослідження")
+            Text(stringResource(R.string.add_first_analysis))
         }
     }
 }
@@ -403,7 +404,7 @@ fun AnalysisCard(
                     bitmap?.let { img ->
                         Image(
                             bitmap = img,
-                            contentDescription = "Теплова карта",
+                            contentDescription = stringResource(R.string.heatmap),
                             modifier = Modifier
                                 .size(64.dp)
                                 .clip(RoundedCornerShape(8.dp))
@@ -413,8 +414,8 @@ fun AnalysisCard(
                 }
 
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Дата", formatDateTime(analysis.creationDatetime))
-                    InfoRow("Статус", analysis.analysisStatus.toString())
+                    InfoRow(stringResource(R.string.date), formatDateTime(analysis.creationDatetime))
+                    InfoRow(stringResource(R.string.status), analysis.analysisStatus.toString())
                 }
 
                 Checkbox(
@@ -425,7 +426,7 @@ fun AnalysisCard(
 
             analysis.analysisDiagnosis?.let {
                 Spacer(Modifier.height(8.dp))
-                InfoRow("Діагноз", it)
+                InfoRow(stringResource(R.string.diagnosis), it)
             }
         }
     }
@@ -461,14 +462,14 @@ fun BottomActionBar(
                 horizontalAlignment = Alignment.End
             ) {
                 ActionButton(
-                    text = "Порівняти",
+                    text = stringResource(R.string.compare),
                     painter = painterResource(id = R.drawable.compare_ic),
                     onClick = onCompareClick,
                     backgroundColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
                 ActionButton(
-                    text = "Завантажити",
+                    text = stringResource(R.string.download),
                     painter = painterResource(id = R.drawable.download_ic),
                     onClick = onDownloadClick,
                     backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -487,13 +488,13 @@ fun ComparisonDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
-            Button(onClick = onDismiss) { Text("Закрити") }
+            Button(onClick = onDismiss) { Text(stringResource(R.string.close)) }
         },
-        title = { Text("Порівняння досліджень") },
+        title = { Text(stringResource(R.string.comparison_title)) },
         text = {
             Column {
-                InfoRow("Дата 1", formatDateTime(report.createdAtFrom))
-                InfoRow("Дата 2", formatDateTime(report.createdAtTo))
+                InfoRow(stringResource(R.string.date1), formatDateTime(report.createdAtFrom))
+                InfoRow(stringResource(R.string.date2), formatDateTime(report.createdAtTo))
 
                 Spacer(Modifier.height(8.dp))
 
@@ -502,15 +503,15 @@ fun ComparisonDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Column(Modifier.weight(1f)) {
-                        InfoRow("КТ знімок 1", "")
+                        InfoRow(stringResource(R.string.ct_image1), "")
                         ComparisonImage(base64 = report.fromImageBase64)
                     }
                     Column(Modifier.weight(1f)) {
-                        InfoRow("КТ знімок 2", "")
+                        InfoRow(stringResource(R.string.ct_image2), "")
                         ComparisonImage(base64 = report.toImageBase64)
                     }
                     Column(Modifier.weight(1f)) {
-                        InfoRow("Різниця", "")
+                        InfoRow(stringResource(R.string.difference), "")
                         ComparisonImage(base64 = report.diffHeatmap)
                     }
                 }
@@ -518,19 +519,19 @@ fun ComparisonDialog(
                 Spacer(Modifier.height(8.dp))
 
                 InfoRow(
-                    "Діагноз",
+                    stringResource(R.string.diagnosis),
                     "${firstWord(report.diagnosisTextFrom.toString())} -> ${firstWord(report.diagnosisTextTo.toString())}"
                 )
                 InfoRow(
-                    "Точність",
+                    stringResource(R.string.accuracy),
                     "${formatDouble(report.accuracyFrom?.toDouble())} -> ${formatDouble(report.accuracyTo?.toDouble())}"
                 )
                 InfoRow(
-                    "Повнота",
+                    stringResource(R.string.recall),
                     "${formatDouble(report.recallFrom?.toDouble())} -> ${formatDouble(report.recallTo?.toDouble())}"
                 )
                 InfoRow(
-                    "Прецизійність",
+                    stringResource(R.string.precision),
                     "${formatDouble(report.precisionFrom?.toDouble())} -> ${formatDouble(report.precisionTo?.toDouble())}"
                 )
             }
@@ -563,7 +564,7 @@ fun formatDateTime(isoString: String): String {
     return try {
         val parsed = LocalDateTime.parse(isoString)
         parsed.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         isoString
     }
 }
@@ -584,7 +585,7 @@ fun savePdfFile(context: Context, data: ByteArray, fileName: String) {
         outputStream.write(data)
         outputStream.close()
 
-        Toast.makeText(context, "Файл збережено: ${file.name}", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.file_saved, file.name), Toast.LENGTH_LONG).show()
 
         val uri = FileProvider.getUriForFile(
             context,
@@ -598,6 +599,6 @@ fun savePdfFile(context: Context, data: ByteArray, fileName: String) {
         context.startActivity(intent)
 
     } catch (e: Exception) {
-        Toast.makeText(context, "Помилка збереження PDF: ${e.message}", Toast.LENGTH_LONG).show()
+        Toast.makeText(context, context.getString(R.string.file_save_error, e.message), Toast.LENGTH_LONG).show()
     }
 }
