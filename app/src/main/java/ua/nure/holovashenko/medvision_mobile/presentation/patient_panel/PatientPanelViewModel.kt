@@ -1,11 +1,13 @@
 package ua.nure.holovashenko.medvision_mobile.presentation.patient_panel
 
+import android.app.Application
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import ua.nure.holovashenko.medvision_mobile.R
 import ua.nure.holovashenko.medvision_mobile.data.remote.model.ImageAnalysisResponse
 import ua.nure.holovashenko.medvision_mobile.domain.model.AnalysisFilterOption
 import ua.nure.holovashenko.medvision_mobile.domain.model.AnalysisSortOption
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PatientPanelViewModel @Inject constructor(
-    private val patientRepository: PatientRepository
+    private val patientRepository: PatientRepository,
+    private val app: Application
 ) : ViewModel() {
 
     private val _analyses = MutableStateFlow<List<ImageAnalysisResponse>>(emptyList())
@@ -96,7 +99,7 @@ class PatientPanelViewModel @Inject constructor(
                 loadAllHeatmaps()
             }.onFailure {
                 _analyses.value = emptyList()
-                _errorMessage.value = it.message ?: "Невідома помилка при завантаженні аналізів"
+                _errorMessage.value = it.message ?: app.getString(R.string.error_loading_analyses)
             }
 
             _isLoading.value = false
@@ -112,7 +115,7 @@ class PatientPanelViewModel @Inject constructor(
             patientRepository.getAllHeatmaps().onSuccess { map ->
                 _heatmaps.value = map
             }.onFailure {
-                _errorMessage.value = "Не вдалося завантажити теплові карти: ${it.message}"
+                _errorMessage.value = app.getString(R.string.error_loading_heatmaps, it.message)
                 Log.e("heatmaps loading", it.message.toString())
             }
         }
@@ -121,7 +124,7 @@ class PatientPanelViewModel @Inject constructor(
     private fun ImageAnalysisResponse.toLocalDateTime(): LocalDateTime {
         return try {
             LocalDateTime.parse(this.creationDatetime, DateTimeFormatter.ISO_DATE_TIME)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             LocalDateTime.MIN
         }
     }

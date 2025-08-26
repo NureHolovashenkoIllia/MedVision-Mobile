@@ -102,7 +102,7 @@ fun PatientPanelScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Notifications,
-                                    contentDescription = "Unread Analyses"
+                                    contentDescription = stringResource(R.string.unread_analyses)
                                 )
                             }
                         }
@@ -115,7 +115,7 @@ fun PatientPanelScreen(
                             if (unreadAnalyses.isEmpty()) {
                                 DropdownMenuItem(
                                     text = { Text(
-                                        text = "No unread analyses",
+                                        text = stringResource(R.string.no_unread_analyses),
                                         color = MaterialTheme.colorScheme.onSurface,
                                         fontWeight = FontWeight.Normal
                                     ) },
@@ -125,7 +125,7 @@ fun PatientPanelScreen(
                                 unreadAnalyses.forEach {
                                     DropdownMenuItem(
                                         text = { Text(
-                                            text = "Аналіз №${it.imageAnalysisId}",
+                                            text = stringResource(R.string.analysis_number, it.imageAnalysisId),
                                             color = MaterialTheme.colorScheme.onSurface,
                                             fontWeight = FontWeight.Normal
                                         ) },
@@ -140,7 +140,7 @@ fun PatientPanelScreen(
                     }
 
                     IconButton(onClick = onProfileClick) {
-                        Icon(Icons.Default.AccountCircle, contentDescription = "Profile")
+                        Icon(Icons.Default.AccountCircle, contentDescription = stringResource(R.string.profile))
                     }
                 }
             )
@@ -178,7 +178,7 @@ fun PatientPanelScreen(
             }
 
             if (isLoading) {
-                Loading("Завантаження даних...")
+                Loading(stringResource(R.string.loading_data))
             }
         }
     }
@@ -206,11 +206,11 @@ fun SearchAndSortBar(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchChange,
-            placeholder = { Text("Пошук аналізів") },
+            placeholder = { Text(stringResource(R.string.search_analyses)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
-                    contentDescription = "Пошук"
+                    contentDescription = stringResource(R.string.search)
                 )
             },
             shape = RoundedCornerShape(12.dp),
@@ -229,7 +229,7 @@ fun SearchAndSortBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.sort_ic),
-                    contentDescription = "Сортувати",
+                    contentDescription = stringResource(R.string.sort),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -273,7 +273,7 @@ fun SearchAndSortBar(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.filter_ic),
-                    contentDescription = "Фільтрація",
+                    contentDescription = stringResource(R.string.filter),
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -332,7 +332,7 @@ fun AnalysisCard(
                     bitmap?.let { img ->
                         Image(
                             bitmap = img,
-                            contentDescription = "Теплова карта",
+                            contentDescription = stringResource(R.string.heatmap),
                             modifier = Modifier
                                 .size(64.dp)
                                 .clip(RoundedCornerShape(8.dp))
@@ -342,14 +342,14 @@ fun AnalysisCard(
                 }
 
                 Column(Modifier.weight(1f)) {
-                    InfoRow("Дата", formatDateTime(analysis.creationDatetime))
-                    InfoRow("Статус", analysis.analysisStatus.toString())
+                    InfoRow(stringResource(R.string.date), formatDateTime(analysis.creationDatetime))
+                    InfoRow(stringResource(R.string.status), analysis.analysisStatus.toString())
                 }
 
                 if (!analysis.viewed) {
                     Icon(
                         imageVector = Icons.Default.Notifications,
-                        contentDescription = "Unread",
+                        contentDescription = stringResource(R.string.unread),
                         tint = MaterialTheme.colorScheme.error
                     )
                 }
@@ -357,7 +357,7 @@ fun AnalysisCard(
 
             analysis.analysisDiagnosis?.let {
                 Spacer(Modifier.height(8.dp))
-                InfoRow("Діагноз", it)
+                InfoRow(stringResource(R.string.diagnosis), it)
             }
         }
     }

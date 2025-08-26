@@ -46,6 +46,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -76,7 +77,7 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Мій профіль") },
+                title = { Text(stringResource(R.string.profile_title)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -86,12 +87,12 @@ fun ProfileScreen(
                 modifier = Modifier.shadow(4.dp),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Назад")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 },
                 actions = {
                     IconButton(onClick = onLogout) {
-                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = "Вийти")
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, contentDescription = stringResource(R.string.logout))
                     }
                 }
             )
@@ -104,7 +105,7 @@ fun ProfileScreen(
         ) {
             when {
                 isLoading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                error != null -> Text("Помилка: $error", color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
+                error != null -> Text(stringResource(R.string.error_message, error ?: ""), color = MaterialTheme.colorScheme.error, modifier = Modifier.align(Alignment.Center))
                 profile != null -> ProfileBody(profile = profile!!, avatarFlow = viewModel.avatar, viewModel, onProfileChange = viewModel::setEditedProfile)
             }
         }
@@ -184,7 +185,7 @@ fun ProfileBody(
                     modifier = Modifier.weight(1f)
                 ) {
                     ValidatedProfileField(
-                        label = "Ім’я",
+                        label = stringResource(R.string.name),
                         value = editableProfile.name,
                         error = nameError,
                         onValueChange = {
@@ -198,7 +199,7 @@ fun ProfileBody(
                         value = editableProfile.email,
                         onValueChange = {},
                         enabled = false,
-                        label = { Text("Email") },
+                        label = { Text(stringResource(R.string.email)) },
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -210,7 +211,7 @@ fun ProfileBody(
         when (editableProfile.role) {
             UserRole.PATIENT -> {
                 item {
-                    SectionCard("Медичні показники") {
+                    SectionCard(stringResource(R.string.section_medical_indicators)) {
                         GenderPickerField(
                             selected = editableProfile.gender ?: "",
                             error = genderError,
@@ -234,7 +235,7 @@ fun ProfileBody(
                         )
 
                         ValidatedProfileField(
-                            label = "Зріст (см)",
+                            label = stringResource(R.string.height),
                             value = editableProfile.heightCm?.toString() ?: "",
                             error = heightError,
                             onValueChange = {
@@ -246,7 +247,7 @@ fun ProfileBody(
                         )
 
                         ValidatedProfileField(
-                            label = "Вага (кг)",
+                            label = stringResource(R.string.weight),
                             value = editableProfile.weightKg?.toString() ?: "",
                             error = weightError,
                             onValueChange = {
@@ -261,16 +262,16 @@ fun ProfileBody(
 
                 item {
                     Spacer(Modifier.height(16.dp))
-                    SectionCard("Стан здоров’я") {
-                        ProfileField("Хронічні захворювання", editableProfile.chronicDiseases ?: "") {
+                    SectionCard(stringResource(R.string.section_health_status)) {
+                        ProfileField(stringResource(R.string.chronic_diseases), editableProfile.chronicDiseases ?: "") {
                             editableProfile = editableProfile.copy(chronicDiseases = it)
                             onProfileChange(editableProfile)
                         }
-                        ProfileField("Алергії", editableProfile.allergies ?: "") {
+                        ProfileField(stringResource(R.string.allergies), editableProfile.allergies ?: "") {
                             editableProfile = editableProfile.copy(allergies = it)
                             onProfileChange(editableProfile)
                         }
-                        ProfileField("Адреса", editableProfile.address ?: "") {
+                        ProfileField(stringResource(R.string.address), editableProfile.address ?: "") {
                             editableProfile = editableProfile.copy(address = it)
                             onProfileChange(editableProfile)
                         }
@@ -280,28 +281,30 @@ fun ProfileBody(
 
             UserRole.DOCTOR -> {
                 item {
-                    SectionCard("Професійна діяльність") {
+                    SectionCard(stringResource(R.string.section_professional)) {
+                        var position = stringResource(R.string.position)
                         ValidatedProfileField(
-                            label = "Посада",
+                            label = position,
                             value = editableProfile.position ?: "",
                             error = positionError,
                             onValueChange = {
                                 editableProfile = editableProfile.copy(position = it)
-                                positionError = viewModel.validateNotEmpty(it, "Посада")
+                                positionError = viewModel.validateNotEmpty(it, position)
                                 onProfileChange(editableProfile)
                             }
                         )
+                        var department = stringResource(R.string.department)
                         ValidatedProfileField(
-                            label = "Відділення",
+                            label = department,
                             value = editableProfile.department ?: "",
                             error = departmentError,
                             onValueChange = {
                                 editableProfile = editableProfile.copy(department = it)
-                                departmentError = viewModel.validateNotEmpty(it, "Відділення")
+                                departmentError = viewModel.validateNotEmpty(it, department)
                                 onProfileChange(editableProfile)
                             }
                         )
-                        ProfileField("Медичний заклад", editableProfile.medicalInstitution ?: "") {
+                        ProfileField(stringResource(R.string.medical_institution), editableProfile.medicalInstitution ?: "") {
                             editableProfile = editableProfile.copy(medicalInstitution = it)
                             onProfileChange(editableProfile)
                         }
@@ -310,16 +313,16 @@ fun ProfileBody(
 
                 item {
                     Spacer(Modifier.height(16.dp))
-                    SectionCard("Кваліфікація") {
-                        ProfileField("Освіта", editableProfile.education ?: "") {
+                    SectionCard(stringResource(R.string.section_qualification)) {
+                        ProfileField(stringResource(R.string.education), editableProfile.education ?: "") {
                             editableProfile = editableProfile.copy(education = it)
                             onProfileChange(editableProfile)
                         }
-                        ProfileField("Досягнення", editableProfile.achievements ?: "") {
+                        ProfileField(stringResource(R.string.achievements), editableProfile.achievements ?: "") {
                             editableProfile = editableProfile.copy(achievements = it)
                             onProfileChange(editableProfile)
                         }
-                        ProfileField("Номер ліцензії", editableProfile.licenseNumber ?: "") {
+                        ProfileField(stringResource(R.string.license_number), editableProfile.licenseNumber ?: "") {
                             editableProfile = editableProfile.copy(licenseNumber = it)
                             onProfileChange(editableProfile)
                         }
@@ -333,6 +336,8 @@ fun ProfileBody(
         item { Spacer(modifier = Modifier.height(30.dp)) }
 
         item {
+            var position = stringResource(R.string.position)
+            var department = stringResource(R.string.department)
             Button(
                 onClick = {
                     val valid = when (editableProfile.role) {
@@ -346,8 +351,8 @@ fun ProfileBody(
                         }
                         UserRole.DOCTOR -> {
                             nameError = viewModel.validateName(editableProfile.name)
-                            positionError = viewModel.validateNotEmpty(editableProfile.position ?: "", "Посада")
-                            departmentError = viewModel.validateNotEmpty(editableProfile.department ?: "", "Відділення")
+                            positionError = viewModel.validateNotEmpty(editableProfile.position ?: "", position)
+                            departmentError = viewModel.validateNotEmpty(editableProfile.department ?: "", department)
                             listOf(nameError, positionError, departmentError).all { it == null }
                         }
                         else -> true
@@ -357,7 +362,7 @@ fun ProfileBody(
                 },
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Зберегти зміни")
+                Text(stringResource(R.string.save_changes))
             }
         }
     }
@@ -421,13 +426,13 @@ fun BirthDatePickerField(
             value = birthDate,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Дата народження") },
+            label = { Text(stringResource(R.string.birth_date)) },
             isError = error != null,
             trailingIcon = {
                 IconButton(onClick = { showDatePicker = true }) {
                     Icon(
                         imageVector = Icons.Default.DateRange,
-                        contentDescription = "Select date",
+                        contentDescription = stringResource(R.string.select_date),
                         modifier = Modifier.padding(end = 16.dp)
                     )
                 }
@@ -527,7 +532,7 @@ fun ProfileAvatar(
         if (bitmap != null) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
-                contentDescription = "Аватар",
+                contentDescription = stringResource(R.string.avatar),
                 modifier = Modifier.fillMaxSize()
             )
         } else {
@@ -539,7 +544,7 @@ fun ProfileAvatar(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.account_ic),
-                    contentDescription = "Аватар",
+                    contentDescription = stringResource(R.string.avatar),
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
                     modifier = Modifier.fillMaxSize()
                 )
@@ -557,7 +562,7 @@ fun ProfileAvatar(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.edit_ic),
-                contentDescription = "Змінити аватар",
+                contentDescription = stringResource(R.string.change_avatar),
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
                     .align(Alignment.Center)

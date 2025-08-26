@@ -76,6 +76,17 @@
     <string name="account_icon">Іконка акаунту</string>
     <string name="heatmap">Теплова карта</string>
 
+    <!-- Patient panel -->
+    <string name="unread_analyses">Непрочитані дослідження</string>
+    <string name="no_unread_analyses">Немає непрочитаних досліджень</string>
+    <string name="analysis_number">Аналіз №%1$d</string>
+    <string name="filter">Фільтр</string>
+    <string name="status">Статус</string>
+    <string name="unread">Непереглянуто</string>
+    <string name="search_analyses">Пошук досліджень</string>
+    <string name="error_loading_analyses">Невідома помилка при завантаженні аналізів</string>
+    <string name="error_loading_heatmaps">Не вдалося завантажити теплові карти: %1$s</string>
+
     <!-- Doctor Panel -->
     <string name="profile">Профіль</string>
     <string name="search_patients">Пошук пацієнтів</string>
@@ -117,4 +128,35 @@
     <string name="status_reviewed">Переглянуто</string>
     <string name="status_requires_revision">Потребує доопрацювання</string>
 
+    <!-- Profile -->
+    <string name="profile_title">Мій профіль</string>
+    <string name="logout">Вийти</string>
+    <string name="save_changes">Зберегти зміни</string>
+    <string name="change_avatar">Змінити аватар</string>
+
+    <!-- Profile fields -->
+    <string name="gender">Стать</string>
+    <string name="height">Зріст (см)</string>
+    <string name="weight">Вага (кг)</string>
+    <string name="chronic_diseases">Хронічні захворювання</string>
+    <string name="allergies">Алергії</string>
+    <string name="address">Адреса</string>
+    <string name="position">Посада</string>
+    <string name="department">Відділення</string>
+    <string name="medical_institution">Медичний заклад</string>
+    <string name="education">Освіта</string>
+    <string name="achievements">Досягнення</string>
+    <string name="license_number">Номер ліцензії</string>
+
+    <!-- Profile sections -->
+    <string name="section_medical_indicators">Медичні показники</string>
+    <string name="section_health_status">Стан здоров’я</string>
+    <string name="section_professional">Професійна діяльність</string>
+    <string name="section_qualification">Кваліфікація</string>
+
+    <!-- Validation -->
+    <string name="invalid_height">Невірне значення зросту</string>
+    <string name="invalid_weight">Невірне значення ваги</string>
+    <string name="field_required">%1$s обов’язкове</string>
+    <string name="upload_avatar_error">Не вдалося завантажити аватар: %1$s</string>
 </resources>

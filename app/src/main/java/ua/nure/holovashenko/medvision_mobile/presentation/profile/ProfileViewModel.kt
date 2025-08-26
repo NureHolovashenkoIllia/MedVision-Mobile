@@ -1,11 +1,13 @@
 package ua.nure.holovashenko.medvision_mobile.presentation.profile
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import ua.nure.holovashenko.medvision_mobile.R
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserProfile
 import ua.nure.holovashenko.medvision_mobile.domain.model.UserRole
 import ua.nure.holovashenko.medvision_mobile.domain.repository.AuthRepository
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val app: Application
 ) : ViewModel() {
 
     private val _userProfile = MutableStateFlow<UserProfile?>(null)
@@ -82,31 +85,31 @@ class ProfileViewModel @Inject constructor(
             repository.uploadAvatar(bytes, name).onSuccess { url ->
                 avatar.value = bytes
             }.onFailure {
-                errorMessage.value = "Не вдалося завантажити аватар: ${it.message}"
+                errorMessage.value = app.getString(R.string.upload_avatar_error, it.message)
             }
             isLoading.value = false
         }
     }
 
-    fun validateName(name: String) = if (name.isBlank()) "Ім’я обов’язкове" else null
+    fun validateName(name: String) = if (name.isBlank()) app.getString(R.string.name_required) else null
 
     fun validateBirthDate(date: String) =
         if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}")))
-            "Неправильний формат дати (YYYY-MM-DD)"
+            app.getString(R.string.invalid_date)
         else null
 
-    fun validateGender(gender: String) = if (gender.isBlank()) "Оберіть стать" else null
+    fun validateGender(gender: String) = if (gender.isBlank()) app.getString(R.string.gender_required) else null
 
     fun validateHeight(height: String) =
         if (height.toDoubleOrNull()?.let { it > 0 } != true)
-            "Невірне значення зросту"
+            app.getString(R.string.invalid_height)
         else null
 
     fun validateWeight(weight: String) =
         if (weight.toDoubleOrNull()?.let { it > 0 } != true)
-            "Невірне значення ваги"
+            app.getString(R.string.invalid_weight)
         else null
 
     fun validateNotEmpty(field: String, label: String): String? =
-        if (field.isBlank()) "$label обов’язкове" else null
+        if (field.isBlank()) app.getString(R.string.field_required, label) else null
 }

@@ -75,6 +75,16 @@
     <string name="account_icon">Account icon</string>
     <string name="heatmap">Heatmap</string>
 
+    <!-- Patient panel -->
+    <string name="unread_analyses">Unread Analyses</string>
+    <string name="no_unread_analyses">No unread analyses</string>
+    <string name="analysis_number">Analysis #%1$d</string>
+    <string name="filter">Filter</string>
+    <string name="status">Status</string>
+    <string name="unread">Unread</string>
+    <string name="search_analyses">Search analyses</string>
+    <string name="error_loading_analyses">Unknown error while loading analyses</string>
+    <string name="error_loading_heatmaps">Failed to load heatmaps: %1$s</string>
 
     <!-- Doctor Panel -->
     <string name="profile">Profile</string>
@@ -118,4 +128,35 @@
     <string name="status_reviewed">Reviewed</string>
     <string name="status_requires_revision">Requires Revision</string>
 
+    <!-- Profile -->
+    <string name="profile_title">My Profile</string>
+    <string name="logout">Logout</string>
+    <string name="save_changes">Save changes</string>
+    <string name="change_avatar">Change avatar</string>
+
+    <!-- Profile fields -->
+    <string name="gender">Gender</string>
+    <string name="height">Height (cm)</string>
+    <string name="weight">Weight (kg)</string>
+    <string name="chronic_diseases">Chronic diseases</string>
+    <string name="allergies">Allergies</string>
+    <string name="address">Address</string>
+    <string name="position">Position</string>
+    <string name="department">Department</string>
+    <string name="medical_institution">Medical Institution</string>
+    <string name="education">Education</string>
+    <string name="achievements">Achievements</string>
+    <string name="license_number">License number</string>
+
+    <!-- Profile sections -->
+    <string name="section_medical_indicators">Medical Indicators</string>
+    <string name="section_health_status">Health Status</string>
+    <string name="section_professional">Professional Activity</string>
+    <string name="section_qualification">Qualification</string>
+
+    <!-- Validation -->
+    <string name="invalid_height">Invalid height</string>
+    <string name="invalid_weight">Invalid weight</string>
+    <string name="field_required">%1$s is required</string>
+    <string name="upload_avatar_error">Failed to upload avatar: %1$s</string>
 </resources>
